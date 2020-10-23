@@ -1,4 +1,4 @@
-from queues import QueueV2 as Queue
+from my_queue import Queue
 from stackA import Stack
 from random import randint
 
@@ -13,7 +13,7 @@ def random_queue(length=20):
 def queue_reverser(queue):
     new_queue = Queue()
     stack = Stack()
-    length = queue.length()
+    length = queue.length
     for i in range(length):
         item = queue.dequeue()
         stack.push(item)
