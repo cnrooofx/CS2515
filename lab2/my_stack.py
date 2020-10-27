@@ -28,8 +28,7 @@ class Stack:
         if self._size == 0:
             return None
         item = self._first.element
-        # self._first = self._first.next
-        self._first = None
+        self._first = self._first.next
         self._size -= 1
         return item
 
