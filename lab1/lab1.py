@@ -1,4 +1,5 @@
-from stackA import *
+from stackA import Stack
+
 
 def stackReverser(in_stack):
     if not isinstance(in_stack, Stack):
@@ -7,6 +8,7 @@ def stackReverser(in_stack):
     while in_stack.length() > 0:
         reverse_stack.push(in_stack.pop())
     return reverse_stack
+
 
 def bracketChecker(input_string):
     open_brackets = ['(', '[', '{']
@@ -30,6 +32,7 @@ def bracketChecker(input_string):
                 stack.pop()
     return True
 
+
 def main():
     print('stackReverser\n')
     stack1 = Stack()
@@ -52,6 +55,7 @@ def main():
     print('bracketChecker\n')
     test_string = '[he{}ll(ooo)oooooo(o)]'
     print(bracketChecker(test_string))
+
 
 if __name__ == '__main__':
     main()

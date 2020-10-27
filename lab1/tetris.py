@@ -1,8 +1,17 @@
-from stackA import *
+from stackA import Stack
 from random import randint
 from time import time
 
+
 def game(no_of_stacks=3, no_of_games=1, max_length=6, turn_time=5):
+    """Game of tetris
+
+    Args:
+        no_of_stacks: int -- How many rows to play (Default value: 3)
+        no_of_games: int -- Number of rounds to play (Default value: 1)
+        max_length: int -- Maximum height of blocks on the stack (Default value: 6)
+        turn_time: int -- Time in seconds given to make each move (Default value: 5)
+    """
     score = 0
     for game in range(no_of_games):
         # Number of blocks
@@ -26,23 +35,31 @@ def game(no_of_stacks=3, no_of_games=1, max_length=6, turn_time=5):
                 print(index + 1, stack_list[index])
             print()
             print('Next -> ', next)
-            start = time()
             print('Press \'p\' to pass or')
+
+            # Get user input and time taken
+            start = time()
             next_row = input('Select row: ')
             end = time()
             time_taken = end - start
+
             if next_row == 'q':
                 break
-            elif time_taken > turn_time or next_row in range(1, no_of_stacks+1):
-                if time_taken > turn_time:
-                    print('You took too long!')
-                    next_row = randint(1, no_of_stacks+1)
-                if next == stack_list[next_row].top():
-                    score += 1
-                    stack_list[next_row].pop()
-                else:
-                    stack_list[next_row].push(next)
+            elif time_taken > turn_time:
+                print('You took too long!')
+                next_row = randint(0, no_of_stacks-1)
+            elif next_row in str(range(1, no_of_stacks+1)):
+                next_row = int(next_row)-1
+            else:
+                next_row = randint(0, no_of_stacks-1)
+
+            if next == stack_list[next_row].top():
+                score += 1
+                stack_list[next_row].pop()
+            else:
+                stack_list[next_row].push(next)
     print('---------\nGame Over\nScore:', score, '\n---------')
+
 
 if __name__ == '__main__':
     # no_of_games = 3
