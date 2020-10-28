@@ -69,6 +69,11 @@ class Router:
         return
 
 
-pack = Packet()
-pack.content = 'hello'
-print(pack.content)
+def main():
+    pack = Packet()
+    pack.content = 'hello'
+    print(pack.content)
+
+
+if __name__ == '__main__':
+    main()
