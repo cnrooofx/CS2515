@@ -1,8 +1,10 @@
+"""Class for a Queue ADT."""
+
 import sys
 
 
 class Queue:
-    """ A queue using a python list, with internal wrap-around.
+    """A queue using a python list, with internal wrap-around.
 
     Attributes:
         _body: List that represents the queue body (protected)
@@ -11,13 +13,13 @@ class Queue:
     """
 
     def __init__(self):
-        """Constructor for the queue class"""
+        """Construct a queue object."""
         self._body = [None] * 10
         self._front = 0    # index of first element, but 0 if empty
         self._size = 0    # number of elements in the queue
 
     def __str__(self):
-        """String representation of the queue"""
+        """Return a string representation of the queue."""
         output = '<-'
         if self._size > 0:
             i = self._front
@@ -28,16 +30,16 @@ class Queue:
         return output
 
     def _get_size(self):
-        """Return the internal size of the queue"""
+        """Return the internal size of the queue."""
         return sys.getsizeof(self._body)
 
     def _summary(self):
-        """Return a string summary of the queue"""
+        """Return a string summary of the queue."""
         return ('Front:' + str(self._front)
                 + '; size:' + str(self._size))
 
     def __requeue(self):
-        """Grow/shrink the internal representation of the queue"""
+        """Grow/shrink the internal representation of the queue."""
         oldbody = self._body
         oldlength = len(self._body)
         self._body = [None] * (2*self._size)
@@ -67,7 +69,7 @@ class Queue:
                 self.__requeue()
 
     def dequeue(self):
-        """Return (and remove) the item in the queue for longest"""
+        """Return (and remove) the item in the queue for longest."""
         if self._size == 0:
             return None
         item = self._body[self._front]
@@ -84,12 +86,12 @@ class Queue:
 
     @property
     def length(self):
-        """Return the number of items in the queue"""
+        """Return the number of items in the queue."""
         return self._size
 
     @property
     def first(self):
-        """Return the first item in the queue"""
+        """Return the first item in the queue."""
         if self._size == 0:
             return None
         return self._body[self._front]

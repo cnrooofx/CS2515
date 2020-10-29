@@ -1,12 +1,17 @@
+"""Class for a Stack ADT using linked list."""
+
 
 class SLNode:
+    """A node to be used in a Singly Linked List."""
+
     def __init__(self, item, next_node):
+        """Construct an SLNode object."""
         self.element = item
         self.next = next_node
 
 
 class Stack:
-    """ A stack using a linked list.
+    """A stack using a linked list.
 
     Attributes:
         _first: First element node in the stack (protected)
@@ -14,7 +19,7 @@ class Stack:
     """
 
     def __init__(self):
-        """Constructor for the stack class"""
+        """Construct the stack class."""
         self._first = None
         self._size = 0
 
@@ -45,7 +50,7 @@ class Stack:
         return self._size
 
     def __str__(self):
-        """String representation of the stack"""
+        """Return a string representation of the stack."""
         output = ''
         next = self._first
         for i in range(self._size):
