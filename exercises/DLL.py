@@ -22,6 +22,7 @@ class DLLinkedList:
         self._tail = DLLNode(None, self._head, None)
         self._head.next = self._tail
         self._size = 0
+        self._cursor = self._head
 
     def _add_after(self, item, before):
         new_node = DLLNode(item, None, None)
@@ -85,14 +86,52 @@ class DLLinkedList:
     def remove_first(self):
         if self._size > 0:
             self._remove_node(self._head.next)
+            self._size -= 1
 
     def remove_last(self):
         if self._size > 0:
             self._remove_node(self._tail.prev)
+            self._size -= 1
 
     def remove(self, pos):
         node = self._get_pos_node(pos)
         self._remove_node(node)
+        self._size -= 1
+
+    def get_current(self):
+        if self._size == 0:
+            return None
+        return self._cursor.element
+
+    def add_current(self, item):
+        self._add_after(item, self._cursor)
+
+    def replace_current(self, item):
+        self._cursor.element = item
+
+    def remove_current(self):
+        self._remove_node(self._cursor)
+        self._size -= 1
+        if self._size == 0:
+            self._cursor = None
+        self._cursor = self._head.next
+
+    def next(self):
+        self._cursor = self._cursor.next
+
+    def prev(self):
+        self._cursor = self._cursor.prev
+
+    def move_to_front(self):
+        self._cursor = self._head.next
+
+    def move_to_last(self):
+        self._cursor = self._tail.prev
+
+    def has_next(self):
+        if self._cursor.next != self._tail:
+            return True
+        return False
 
 
 def main():
