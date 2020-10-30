@@ -39,6 +39,24 @@ class DLLinkedList:
         last_node = self._tail.prev
         self._add_after(item, last_node)
 
+    def add(self, pos, item):
+        node = self._get_pos_node(pos)
+        self._add_after(item, node)
+
+    def _get_pos_node(self, pos):
+        i = 0
+        node = self._head.next
+        while i < pos:
+            node = node.next
+            i += 1
+        return node
+
+    def get(self, pos):
+        if pos < 0 or pos >= self._size:
+            return None
+        node = self._get_pos_node(pos)
+        return node.item
+
     def get_first(self):
         if self._size == 0:
             return None
@@ -50,6 +68,10 @@ class DLLinkedList:
             return None
         last_node = self._tail.prev
         return last_node.element
+
+    def replace(self, pos, item):
+        node = self._get_pos_node(pos)
+        node.element = item
 
     def _remove_node(self, node):
         before = node.prev
@@ -67,6 +89,10 @@ class DLLinkedList:
     def remove_last(self):
         if self._size > 0:
             self._remove_node(self._tail.prev)
+
+    def remove(self, pos):
+        node = self._get_pos_node(pos)
+        self._remove_node(node)
 
 
 def main():
