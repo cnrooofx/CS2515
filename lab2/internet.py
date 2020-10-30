@@ -46,8 +46,8 @@ class Packet:
     def path(self):
         return self._path
 
-    def updatePath(self, path_update):
-        self.path.append(path_update)
+    def addToPath(self, path_update):
+        self._path.enqueue(path_update)
 
 
 class Client:
