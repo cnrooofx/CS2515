@@ -123,7 +123,7 @@ class PyToonz:
 
 
 def test():
-    """Test methods for PyToonz."""
+    """My test methods for PyToonz."""
     print("------------\nTrack\n------------")
     t1 = Track('Track 1', 'Artist 1')
     t2 = Track('Track 2', 'Artist 1')
@@ -134,5 +134,29 @@ def test():
     print(t1.play())
 
 
+def basic_test():
+    """Sample test method for assignment."""
+    playlist = PyToonz()
+    t1 = Track("Looking for me", "Paul Woolford and Diplo/Lomax", 0)
+    playlist.add_track(t1)
+    t2 = Track("Giants", "Dermot Kennedy", 0)
+    playlist.add_track(t2)
+    t3 = Track("Holy", "Justin Bieber Ft Chance", 0)
+    playlist.add_track(t3)
+    print(playlist)
+    print(playlist.play())
+    playlist.next_track()
+    print(playlist.get_current())
+    playlist.prev_track()
+    print(playlist.remove_current())
+    print(playlist)
+    t4 = Track("Lemonade", "Internet Money / Gunna / Toliver", 0)
+    playlist.add_track(t4)
+    playlist.next_track()
+    print(playlist.play())
+    print(playlist)
+
+
 if __name__ == '__main__':
     test()
+    basic_test()
