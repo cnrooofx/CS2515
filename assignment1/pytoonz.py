@@ -18,11 +18,11 @@ class DLNode:
 class Track:
     """Track object to be used in a PyToonz playlist."""
 
-    def __init__(self, name, artiste):
+    def __init__(self, name, artiste, timesplayed=0):
         """Create a Track object."""
         self._name = name
         self._artiste = artiste
-        self._timesplayed = 0
+        self._timesplayed = timesplayed
 
     def __str__(self):
         """Return a string representation of the track."""
@@ -52,11 +52,22 @@ class PyToonz:
         self._tail = DLNode(None, self._head, None)
         self._head.next = self._tail
         self._length = 0
-        self._current = self._head
+        self._current = None
 
     def __str__(self):
         """Return a string representation of the playlist."""
-        s = ''
+        s = 'Playlist:'
+        if self._length > 0:
+            i = 0
+            node = self._head.next
+            while i < self._length:
+                if node == self._current:
+                    s += '\n--> '
+                else:
+                    s += '\n'
+                s += str(node.item)
+                node = node.next
+                i += 1
         return s
 
     def length(self):
@@ -65,13 +76,10 @@ class PyToonz:
 
     def add_track(self, track):
         """Add track to the end of the playlist."""
-        self._add_node_after(track, self._tail.prev)
-        self._length += 1
+        self._add_track_node(track, self._tail.prev)
 
     def get_current(self):
         """Return the currently selected track."""
-        if self._length == 0:
-            return None
         return self._current.item
 
     def add_after(self, track):
@@ -99,18 +107,11 @@ class PyToonz:
     def play(self):
         """Play the currently selected track."""
         if self._current is not None:
-            self._current.play()
+            self._current.item.play()
 
     def remove_current(self):
         """Remove the current track."""
-        before = self._current.prev  # Track after removed one
-        after = self._current.next   # Track before removed one
-        before.next = after          # Link the two tracks
-        after.prev = before
-        self._current.element = None  # Set the node at current to None
-        self._current.next = None
-        self._current.prev = None
-        self._current = after        # Set the current pointer to next track
+        self._remove_track_node(self._current)
 
     def _add_track_node(self, track, before):
         new_node = DLNode(track, None, None)  # Create new node object
@@ -119,7 +120,19 @@ class PyToonz:
         after.prev = new_node
         before.next = new_node
         new_node.prev = before
+        if self._length == 0:   # If it's the first track, set it to current
+            self._current = new_node
         self._length += 1       # Increment the playlist length
+
+    def _remove_track_node(self, track):
+        before = self._current.prev  # Track after removed one
+        after = self._current.next   # Track before removed one
+        before.next = after          # Link the two tracks
+        after.prev = before
+        self._current.element = None  # Set the node at current to None
+        self._current.next = None
+        self._current.prev = None
+        self._current = after        # Set the current pointer to next track
 
 
 def test():
@@ -158,5 +171,5 @@ def basic_test():
 
 
 if __name__ == '__main__':
-    test()
+    # test()
     basic_test()
