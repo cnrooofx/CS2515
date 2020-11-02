@@ -19,7 +19,13 @@ class Track:
     """Track object to be used in a PyToonz playlist."""
 
     def __init__(self, name, artiste, timesplayed=0):
-        """Create a Track object."""
+        """Create a Track object.
+
+        Args:
+            name (str): The name of the Track
+            atriste (str): The atriste of the Track
+            timesplayed (int): Counter for track plays (Default: 0)
+        """
         self._name = name
         self._artiste = artiste
         self._timesplayed = timesplayed
@@ -40,7 +46,7 @@ class Track:
     def play(self):
         """Play the track and increment it's play count."""
         self._timesplayed += 1
-        return self
+        return 'Playing: ' + str(self)
 
 
 class PyToonz:
@@ -80,7 +86,7 @@ class PyToonz:
 
     def get_current(self):
         """Return the currently selected track."""
-        return self._current.item
+        return 'Current track: ' + str(self._current.item)
 
     def add_after(self, track):
         """Add a new track after the current track."""
@@ -106,8 +112,9 @@ class PyToonz:
 
     def play(self):
         """Play the currently selected track."""
-        if self._current is not None:
-            self._current.item.play()
+        if self._length == 0:
+            return None
+        return self._current.item.play()
 
     def remove_current(self):
         """Remove the current track."""
@@ -133,6 +140,7 @@ class PyToonz:
         self._current.next = None
         self._current.prev = None
         self._current = after        # Set the current pointer to next track
+        self._length -= 1
 
 
 def test():
@@ -147,7 +155,7 @@ def test():
     print(t1.play())
 
 
-def basic_test():
+def sample_test():
     """Sample test method for assignment."""
     playlist = PyToonz()
     t1 = Track("Looking for me", "Paul Woolford and Diplo/Lomax", 0)
@@ -156,20 +164,52 @@ def basic_test():
     playlist.add_track(t2)
     t3 = Track("Holy", "Justin Bieber Ft Chance", 0)
     playlist.add_track(t3)
+    print('-' * 25)
     print(playlist)
+    print("""
+Should be:
+    Playlist:
+    -> Looking for me; Paul Woolford and Diplo / Lomax (0)
+    Giants; Dermot Kennedy (0)
+    Holy; Justin Bieber Ft Chance (0)""")
+    print('-' * 25)
     print(playlist.play())
+    print("""
+Should be:
+    Playing: Looking for me; Paul Woolford and Diplo / Lomax (1)""")
     playlist.next_track()
+    print('-' * 25)
     print(playlist.get_current())
+    print("""
+Should be:
+    Current track: Giants; Dermot Kennedy (0)""")
     playlist.prev_track()
-    print(playlist.remove_current())
+    playlist.remove_current()
+    print('-' * 25)
     print(playlist)
+    print("""
+Should be:
+    Playlist:
+    -> Giants; Dermot Kennedy (0)
+    Holy; Justin Bieber Ft Chance (0)""")
     t4 = Track("Lemonade", "Internet Money / Gunna / Toliver", 0)
     playlist.add_track(t4)
     playlist.next_track()
+    print('-' * 25)
     print(playlist.play())
+    print("""
+Should be:
+    Playing: Holy; Justin Bieber Ft Chance (1)""")
+    print('-' * 25)
     print(playlist)
+    print("""
+Should be:
+    Playlist:
+    Giants; Dermot Kennedy (0)
+    -> Holy; Justin Bieber Ft Chance (1)
+    Lemonade; Internet Money / Gunna / Toliver (0)""")
 
 
 if __name__ == '__main__':
     # test()
-    basic_test()
+    sample_test()
