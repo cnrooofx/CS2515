@@ -86,6 +86,8 @@ class PyToonz:
 
     def get_current(self):
         """Return the currently selected track."""
+        if self._length == 0:
+            return None
         return 'Current track: ' + str(self._current.item)
 
     def add_after(self, track):
@@ -94,21 +96,27 @@ class PyToonz:
 
     def next_track(self):
         """Select the next track in the playlist."""
-        if self._current.next != self._tail:
-            self._current = self._current.next
+        if self._current.next == self._tail:  # If the next track is tail
+            self._current = self._head.next  # Move current to the first track
         else:
-            self._current = self._head.next
+            self._current = self._current.next  # Set to the next track
 
     def prev_track(self):
         """Select the previous track in the playlist."""
-        if self._current.next != self._head:
-            self._current = self._current.prev
+        if self._current.prev == self._head:  # If the prev track is head
+            self._current = self._tail.prev  # Move current to last track
         else:
-            self._current = self._tail.prev
+            self._current = self._current.prev  # Set to track before current
 
     def reset(self):
         """Remove all tracks from the playlist."""
-        pass
+        if self._length != 0:
+            i = 0
+            node = self._head.next
+            while i < self._length:
+                self._remove_track_node(node)
+                node = node.next
+                i += 1
 
     def play(self):
         """Play the currently selected track."""
@@ -118,7 +126,8 @@ class PyToonz:
 
     def remove_current(self):
         """Remove the current track."""
-        self._remove_track_node(self._current)
+        if self._length != 0:
+            self._remove_track_node(self._current)
 
     def _add_track_node(self, track, before):
         new_node = DLNode(track, None, None)  # Create new node object
@@ -153,6 +162,12 @@ def test():
     print(t2)
     print(t3)
     print(t1.play())
+    print(t1.play())
+    print(t1.play())
+    print(t1.play())
+    print(t1)
+    print(t2.get_artiste())
+    print(t3.get_name())
 
 
 def sample_test():
@@ -211,5 +226,5 @@ Should be:
 
 
 if __name__ == '__main__':
-    # test()
-    sample_test()
+    test()
+    # sample_test()
