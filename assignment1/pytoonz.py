@@ -32,7 +32,7 @@ class Track:
 
     def __str__(self):
         """Return a string representation of the track."""
-        s = "{}; {} ({})".format(self._name, self._artiste, self._timesplayed)
+        s = '{}; {} ({})'.format(self._name, self._artiste, self._timesplayed)
         return s
 
     def get_name(self):
@@ -154,7 +154,7 @@ class PyToonz:
 
 def test():
     """My test methods for PyToonz."""
-    print("------------\nTrack\n------------")
+    print('------------\nTrack\n------------')
     t1 = Track('Track 1', 'Artist 1')
     t2 = Track('Track 2', 'Artist 1')
     t3 = Track('Track 3', 'Artist 2')
@@ -173,56 +173,48 @@ def test():
 def sample_test():
     """Sample test method for assignment."""
     playlist = PyToonz()
-    t1 = Track("Looking for me", "Paul Woolford and Diplo/Lomax", 0)
+    t1 = Track('Looking for me', 'Paul Woolford and Diplo/Lomax', 0)
     playlist.add_track(t1)
-    t2 = Track("Giants", "Dermot Kennedy", 0)
+    t2 = Track('Giants', 'Dermot Kennedy', 0)
     playlist.add_track(t2)
-    t3 = Track("Holy", "Justin Bieber Ft Chance", 0)
+    t3 = Track('Holy', 'Justin Bieber Ft Chance', 0)
     playlist.add_track(t3)
     print('-' * 25)
     print(playlist)
-    print("""
-Should be:
-    Playlist:
-    -> Looking for me; Paul Woolford and Diplo / Lomax (0)
-    Giants; Dermot Kennedy (0)
-    Holy; Justin Bieber Ft Chance (0)""")
+    print("""Should be:
+             Playlist:
+             -> Looking for me; Paul Woolford and Diplo / Lomax (0)
+             Giants; Dermot Kennedy (0)
+             Holy; Justin Bieber Ft Chance (0)""")
     print('-' * 25)
     print(playlist.play())
-    print("""
-Should be:
-    Playing: Looking for me; Paul Woolford and Diplo / Lomax (1)""")
+    print("""Should be:
+             Playing: Looking for me; Paul Woolford and Diplo / Lomax (1)""")
     playlist.next_track()
     print('-' * 25)
     print(playlist.get_current())
-    print("""
-Should be:
-    Current track: Giants; Dermot Kennedy (0)""")
+    print('Should be:\n\tCurrent track: Giants; Dermot Kennedy (0)')
     playlist.prev_track()
     playlist.remove_current()
     print('-' * 25)
     print(playlist)
-    print("""
-Should be:
-    Playlist:
-    -> Giants; Dermot Kennedy (0)
-    Holy; Justin Bieber Ft Chance (0)""")
-    t4 = Track("Lemonade", "Internet Money / Gunna / Toliver", 0)
+    print("""Should be:
+             Playlist:
+             -> Giants; Dermot Kennedy (0)
+             Holy; Justin Bieber Ft Chance (0)""")
+    t4 = Track('Lemonade', 'Internet Money / Gunna / Toliver', 0)
     playlist.add_track(t4)
     playlist.next_track()
     print('-' * 25)
     print(playlist.play())
-    print("""
-Should be:
-    Playing: Holy; Justin Bieber Ft Chance (1)""")
+    print('Should be:\n\tPlaying: Holy; Justin Bieber Ft Chance (1)')
     print('-' * 25)
     print(playlist)
-    print("""
-Should be:
-    Playlist:
-    Giants; Dermot Kennedy (0)
-    -> Holy; Justin Bieber Ft Chance (1)
-    Lemonade; Internet Money / Gunna / Toliver (0)""")
+    print("""Should be:
+             Playlist:
+             Giants; Dermot Kennedy (0)
+             -> Holy; Justin Bieber Ft Chance (1)
+             Lemonade; Internet Money / Gunna / Toliver (0)""")
 
 
 if __name__ == '__main__':
