@@ -132,23 +132,32 @@ class PyToonz:
     def _add_track_node(self, track, before):
         new_node = DLNode(track, None, None)  # Create new node object
         after = before.next     # Get the next track in the playlist
+
         new_node.next = after   # Link the new track into the playlist
         after.prev = new_node
         before.next = new_node
         new_node.prev = before
+
         if self._length == 0:   # If it's the first track, set it to current
             self._current = new_node
         self._length += 1       # Increment the playlist length
 
     def _remove_track_node(self, track):
-        before = track.prev  # Track after removed one
-        after = track.next   # Track before removed one
+        before = track.prev  # Track before removed one
+        after = track.next   # Track after removed one
         before.next = after          # Link the two tracks
         after.prev = before
+
         track.element = None  # Set the node at current to None
         track.next = None
         track.prev = None
+
         self._length -= 1
+        if self._length != 0:
+            if after != self._tail:
+                self._current = after
+            else:
+                self._current = before
 
 
 def test():
@@ -217,5 +226,5 @@ def sample_test():
 
 
 if __name__ == '__main__':
-    test()
-    # sample_test()
+    # test()
+    sample_test()
