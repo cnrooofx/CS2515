@@ -141,14 +141,13 @@ class PyToonz:
         self._length += 1       # Increment the playlist length
 
     def _remove_track_node(self, track):
-        before = self._current.prev  # Track after removed one
-        after = self._current.next   # Track before removed one
+        before = track.prev  # Track after removed one
+        after = track.next   # Track before removed one
         before.next = after          # Link the two tracks
         after.prev = before
-        self._current.element = None  # Set the node at current to None
-        self._current.next = None
-        self._current.prev = None
-        self._current = after        # Set the current pointer to next track
+        track.element = None  # Set the node at current to None
+        track.next = None
+        track.prev = None
         self._length -= 1
 
 
