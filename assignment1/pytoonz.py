@@ -127,7 +127,23 @@ class PyToonz:
     def remove_current(self):
         """Remove the current track."""
         if self._current is not None:
-            self._remove_track_node(self._current)
+            previous = self._current.prev  # Track before removed one
+            next = self._current.next   # Track after removed one
+
+            previous.next = next  # Link the two tracks together
+            next.prev = previous
+
+            self._current.item = None  # Set the node at current to None
+            self._current.next = None
+            self._current.prev = None
+
+            self._length -= 1
+            if self._length == 0:  # If the list is now empty,
+                self._current = None  # Set the current to None
+            elif next == self._tail:  # If the item was the last in the list
+                self._current = previous  # Set the current to the last item
+            else:
+                self._current = next  # Otherwise set to item after removed one
 
     def _add_track_node(self, track, previous):
         new_node = DLNode(track, None, None)  # Create new node object
@@ -141,25 +157,6 @@ class PyToonz:
         if self._length == 0:   # If it's the first track, set it to current
             self._current = new_node
         self._length += 1       # Increment the playlist length
-
-    def _remove_track_node(self, track):
-        previous = track.prev  # Track before removed one
-        next = track.next   # Track after removed one
-
-        previous.next = next  # Link the two tracks together
-        next.prev = previous
-
-        track.item = None  # Set the node at current to None
-        track.next = None
-        track.prev = None
-
-        self._length -= 1
-        if self._length == 0:  # If the list is now empty,
-            self._current = None  # Set the current to None
-        elif next == self._tail:  # If the item was the last in the list
-            self._current = previous  # Set the current to the last item
-        else:
-            self._current = next  # Otherwise set to item after removed one
 
 
 def test():
