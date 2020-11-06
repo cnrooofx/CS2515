@@ -129,25 +129,25 @@ class PyToonz:
         if self._current is not None:
             self._remove_track_node(self._current)
 
-    def _add_track_node(self, track, before):
+    def _add_track_node(self, track, previous):
         new_node = DLNode(track, None, None)  # Create new node object
-        after = before.next     # Get the next track in the playlist
+        next = previous.next     # Get the next track in the playlist
 
-        new_node.next = after   # Link the new track into the playlist
-        after.prev = new_node
-        before.next = new_node
-        new_node.prev = before
+        new_node.next = next   # Link the new track into the playlist
+        next.prev = new_node
+        previous.next = new_node
+        new_node.prev = previous
 
         if self._length == 0:   # If it's the first track, set it to current
             self._current = new_node
         self._length += 1       # Increment the playlist length
 
     def _remove_track_node(self, track):
-        before = track.prev  # Track before removed one
-        after = track.next   # Track after removed one
+        previous = track.prev  # Track before removed one
+        next = track.next   # Track after removed one
 
-        before.next = after          # Link the two tracks together
-        after.prev = before
+        previous.next = next  # Link the two tracks together
+        next.prev = previous
 
         track.item = None  # Set the node at current to None
         track.next = None
@@ -156,10 +156,10 @@ class PyToonz:
         self._length -= 1
         if self._length == 0:  # If the list is now empty,
             self._current = None  # Set the current to None
-        elif after == self._tail:  # If the item was the last in the list
-            self._current = before  # Set the current to the last item
+        elif next == self._tail:  # If the item was the last in the list
+            self._current = previous  # Set the current to the last item
         else:
-            self._current = after  # Otherwise set to item after removed one
+            self._current = next  # Otherwise set to item after removed one
 
 
 def test():
