@@ -91,43 +91,45 @@ class PyToonz:
 
     def add_after(self, track):
         """Add a new track after the current track."""
-        self._add_track_node(track, self._current)
+        if self._current is not None:
+            self._add_track_node(track, self._current)
+        else:
+            self.add_track(track)  # Add to end if no current Track
 
     def next_track(self):
         """Select the next track in the playlist."""
-        if self._current.next == self._tail:  # If the next track is tail
-            self._current = self._head.next  # Move current to the first track
-        else:
-            self._current = self._current.next  # Set to the next track
+        if self._current is not None:
+            if self._current.next == self._tail:  # If the next track is tail
+                self._current = self._head.next  # Move current to first track
+            else:
+                self._current = self._current.next  # Set to the next track
 
     def prev_track(self):
         """Select the previous track in the playlist."""
-        if self._current.prev == self._head:  # If the prev track is head
-            self._current = self._tail.prev  # Move current to last track
-        else:
-            self._current = self._current.prev  # Set to track before current
+        if self._current is not None:
+            if self._current.prev == self._head:  # If the prev track is head
+                self._current = self._tail.prev  # Move current to last track
+            else:
+                self._current = self._current.prev  # Set to previous track
 
     def reset(self):
         """Remove all tracks from the playlist."""
-        if self._length != 0:
-            i = 0
-            node = self._head.next
-            while i < self._length:
-                next_node = node.next
-                self._remove_track_node(node)
-                node = next_node
-                i += 1
+        node = self._head.next
+        while self._length > 0:
+            next_node = node.next  # Save next node to remove
+            self._remove_track_node(node)
+            node = next_node
 
     def play(self):
         """Play the currently selected track."""
         if self._current is None:
-            print('Error - No track currently selected.')
+            print('Error - No track currently selected to play.')
         else:
             print(self._current.item.play())
 
     def remove_current(self):
         """Remove the current track."""
-        if self._length != 0:
+        if self._current is not None:
             self._remove_track_node(self._current)
 
     def _add_track_node(self, track, before):
