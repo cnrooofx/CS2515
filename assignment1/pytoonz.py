@@ -113,12 +113,9 @@ class PyToonz:
                 self._current = self._current.prev  # Set to previous track
 
     def reset(self):
-        """Remove all tracks from the playlist."""
-        node = self._head.next
-        while self._length > 0:
-            next_node = node.next  # Save next node to remove
-            self._remove_track_node(node)
-            node = next_node
+        """Set current track to first one in the playlist."""
+        if self._length != 0:
+            self._current = self._head.next
 
     def play(self):
         """Play the currently selected track."""
@@ -162,7 +159,7 @@ class PyToonz:
         elif after == self._tail:  # If the item was the last in the list
             self._current = before  # Set the current to the last item
         else:
-            self._current = after
+            self._current = after  # Otherwise set to item after removed one
 
 
 def test():
