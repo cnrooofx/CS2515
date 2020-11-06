@@ -62,19 +62,18 @@ class PyToonz:
 
     def __str__(self):
         """Return a string representation of the playlist."""
-        s = 'Playlist:'
+        string = ['Playlist:']
         if self._length > 0:
             i = 0
             node = self._head.next
             while i < self._length:
+                item = str(node.item)
                 if node == self._current:
-                    s += '\n--> '
-                else:
-                    s += '\n'
-                s += str(node.item)
+                    item = '--> ' + item
+                string.append(item)
                 node = node.next
                 i += 1
-        return s
+        return '\n'.join(string)
 
     def length(self):
         """Return the length of the playlist."""
