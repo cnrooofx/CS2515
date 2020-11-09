@@ -44,7 +44,7 @@ class Track:
         return self._artiste
 
     def play(self):
-        """Play the track and increment it's play count."""
+        """Play the track (Return string and increment it's play count)."""
         self._timesplayed += 1
         return 'Playing: ' + str(self)
 
@@ -62,7 +62,7 @@ class PyToonz:
 
     def __str__(self):
         """Return a string representation of the playlist."""
-        string = ['Playlist:']
+        s_list = ['Playlist:']
         if self._length > 0:
             i = 0
             track = self._head.next
@@ -70,17 +70,17 @@ class PyToonz:
                 item = str(track.item)
                 if track is self._selected:
                     item = '--> ' + item
-                string.append(item)
+                s_list.append(item)
                 track = track.next
                 i += 1
-        return '\n'.join(string)
+        return '\n'.join(s_list)
 
     def length(self):
         """Return the length of the playlist."""
         return self._length
 
     def add_track(self, track):
-        """Add track to the end of the playlist."""
+        """Add a new track to the end of the playlist."""
         self._add_track_node(track, self._tail.prev)
 
     def get_current(self):
@@ -91,10 +91,10 @@ class PyToonz:
 
     def add_after(self, track):
         """Add a new track after the currently selected track."""
-        if self._selected is None:
-            self.add_track(track)  # Add to end if no current Track
-        else:
+        if self._selected is not None:
             self._add_track_node(track, self._selected)
+        else:
+            self.add_track(track)  # If there is no selected track, add to end
 
     def next_track(self):
         """Select the next track in the playlist."""
@@ -119,10 +119,10 @@ class PyToonz:
 
     def play(self):
         """Play the currently selected track."""
-        if self._selected is None:
-            print('Error - No track currently selected to play.')
-        else:
+        if self._selected is not None:
             print(self._selected.item.play())
+        else:
+            print('Error - No track currently selected to play.')
 
     def remove_current(self):
         """Remove the currently selected track."""
@@ -130,33 +130,33 @@ class PyToonz:
             previous = self._selected.prev  # Track before removed one
             next = self._selected.next   # Track after removed one
 
-            previous.next = next  # Link the two tracks together
+            previous.next = next
             next.prev = previous
 
-            self._selected.item = None  # Set the node at current to None
+            self._selected.item = None
             self._selected.next = None
             self._selected.prev = None
 
             self._length -= 1
-            if self._length == 0:  # If the list is now empty,
-                self._selected = None  # Set the current to None
+            if self._length == 0:
+                self._selected = None
             elif next is self._tail:  # If the item was the last in the list
-                self._selected = previous  # Set the current to the last item
+                self._selected = previous  # Set the selection to the last item
             else:
-                self._selected = next  # Set to item after removed one
+                self._selected = next  # Set to item after the removed one
 
     def _add_track_node(self, track, previous):
-        new_node = DLLNode(track, None, None)  # Create new node object
-        next = previous.next     # Get the next track in the playlist
+        new_node = DLLNode(track, None, None)
+        next = previous.next     # Next track in the playlist
 
-        new_node.next = next   # Link the new track into the playlist
+        new_node.next = next   # Link new node to following node
         next.prev = new_node
-        previous.next = new_node
+        previous.next = new_node  # Link new node to preceding node
         new_node.prev = previous
 
-        if self._length == 0:   # If it's the first track, set it to current
-            self._selected = new_node
-        self._length += 1       # Increment the playlist length
+        if self._length == 0:  # If the length is 0, it is the first track
+            self._selected = new_node  # Set the new node as selected
+        self._length += 1
 
 
 def test():
