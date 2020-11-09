@@ -5,11 +5,11 @@ Author: Conor Fox 119322236
 """
 
 
-class DLNode:
+class DLLNode:
     """Node for an item in a Doubly Linked List."""
 
     def __init__(self, item, prevnode, nextnode):
-        """Create a DLNode object."""
+        """Create a DLLNode object."""
         self.item = item
         self.next = nextnode
         self.prev = prevnode
@@ -54,24 +54,24 @@ class PyToonz:
 
     def __init__(self):
         """Create a PyToonz object."""
-        self._head = DLNode(None, None, None)
-        self._tail = DLNode(None, self._head, None)
+        self._head = DLLNode(None, None, None)
+        self._tail = DLLNode(None, self._head, None)
         self._head.next = self._tail
+        self._selected = None
         self._length = 0
-        self._current = None
 
     def __str__(self):
         """Return a string representation of the playlist."""
         string = ['Playlist:']
         if self._length > 0:
             i = 0
-            node = self._head.next
+            track = self._head.next
             while i < self._length:
-                item = str(node.item)
-                if node == self._current:
+                item = str(track.item)
+                if track is self._selected:
                     item = '--> ' + item
                 string.append(item)
-                node = node.next
+                track = track.next
                 i += 1
         return '\n'.join(string)
 
@@ -85,68 +85,68 @@ class PyToonz:
 
     def get_current(self):
         """Return the currently selected track."""
-        if self._current is None:
+        if self._selected is None:
             return None
-        return 'Current track: ' + str(self._current.item)
+        return 'Current track: ' + str(self._selected.item)
 
     def add_after(self, track):
-        """Add a new track after the current track."""
-        if self._current is not None:
-            self._add_track_node(track, self._current)
-        else:
+        """Add a new track after the currently selected track."""
+        if self._selected is None:
             self.add_track(track)  # Add to end if no current Track
+        else:
+            self._add_track_node(track, self._selected)
 
     def next_track(self):
         """Select the next track in the playlist."""
-        if self._current is not None:
-            if self._current.next == self._tail:  # If the next track is tail
-                self._current = self._head.next  # Move current to first track
+        if self._selected is not None:
+            if self._selected.next is self._tail:  # If the next track is tail
+                self._selected = self._head.next  # Move current to first track
             else:
-                self._current = self._current.next  # Set to the next track
+                self._selected = self._selected.next  # Set to the next track
 
     def prev_track(self):
         """Select the previous track in the playlist."""
-        if self._current is not None:
-            if self._current.prev == self._head:  # If the prev track is head
-                self._current = self._tail.prev  # Move current to last track
+        if self._selected is not None:
+            if self._selected.prev is self._head:  # If the prev track is head
+                self._selected = self._tail.prev  # Move current to last track
             else:
-                self._current = self._current.prev  # Set to previous track
+                self._selected = self._selected.prev  # Set to previous track
 
     def reset(self):
         """Set current track to first one in the playlist."""
         if self._length != 0:
-            self._current = self._head.next
+            self._selected = self._head.next
 
     def play(self):
         """Play the currently selected track."""
-        if self._current is None:
+        if self._selected is None:
             print('Error - No track currently selected to play.')
         else:
-            print(self._current.item.play())
+            print(self._selected.item.play())
 
     def remove_current(self):
-        """Remove the current track."""
-        if self._current is not None:
-            previous = self._current.prev  # Track before removed one
-            next = self._current.next   # Track after removed one
+        """Remove the currently selected track."""
+        if self._selected is not None:
+            previous = self._selected.prev  # Track before removed one
+            next = self._selected.next   # Track after removed one
 
             previous.next = next  # Link the two tracks together
             next.prev = previous
 
-            self._current.item = None  # Set the node at current to None
-            self._current.next = None
-            self._current.prev = None
+            self._selected.item = None  # Set the node at current to None
+            self._selected.next = None
+            self._selected.prev = None
 
             self._length -= 1
             if self._length == 0:  # If the list is now empty,
-                self._current = None  # Set the current to None
-            elif next == self._tail:  # If the item was the last in the list
-                self._current = previous  # Set the current to the last item
+                self._selected = None  # Set the current to None
+            elif next is self._tail:  # If the item was the last in the list
+                self._selected = previous  # Set the current to the last item
             else:
-                self._current = next  # Otherwise set to item after removed one
+                self._selected = next  # Set to item after removed one
 
     def _add_track_node(self, track, previous):
-        new_node = DLNode(track, None, None)  # Create new node object
+        new_node = DLLNode(track, None, None)  # Create new node object
         next = previous.next     # Get the next track in the playlist
 
         new_node.next = next   # Link the new track into the playlist
@@ -155,7 +155,7 @@ class PyToonz:
         new_node.prev = previous
 
         if self._length == 0:   # If it's the first track, set it to current
-            self._current = new_node
+            self._selected = new_node
         self._length += 1       # Increment the playlist length
 
 
