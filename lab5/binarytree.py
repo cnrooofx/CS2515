@@ -44,6 +44,24 @@ class BTNode:
         """Change the Right Child of the node."""
         self.right = rightchild
 
+    def removeLeft(self):
+        """Remove and return the Left subtree."""
+        if self.left is None:
+            return None
+        self.left.parent = None
+        left_tree = self.left
+        self.left = None
+        return left_tree
+
+    def removeRight(self):
+        """Remove and return the Right subtree."""
+        if self.right is None:
+            return None
+        self.right.parent = None
+        right_tree = self.right
+        self.right = None
+        return right_tree
+
     def __str__(self):
         """Return a string representation of the Node."""
         if self.parent is None:
@@ -68,8 +86,16 @@ def main():
     print(node.getElement())
     node.setElement("AA")
     node2 = BTNode("B")
-    node.setParent(node2)
-    print(node.getParent())
+    node3 = BTNode("C")
+    node2.setParent(node)
+    print(node2.getParent())
+    node.setLeftChild(node2)
+    node3.setParent(node2)
+    node2.setRightChild(node3)
+    print(node)
+    print(node2)
+    print(node.removeLeft())
+    print(node)
 
 
 if __name__ == '__main__':
