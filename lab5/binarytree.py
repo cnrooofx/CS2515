@@ -79,6 +79,14 @@ class BTNode:
         return "{}, [{}, {}] -- {}".format(self.element, left, right, parent)
 
 
+def inorder_traversal_v0(node):
+    if node.left is not None:
+        inorder_traversal_v0(node.left)
+    print(node.element)
+    if node.right is not None:
+        inorder_traversal_v0(node.right)
+
+
 def main():
     """Test methods for Binary Tree class."""
     print("Binary Tree Node")
@@ -96,6 +104,25 @@ def main():
     print(node2)
     print(node.removeLeft())
     print(node)
+
+    print("\nInorder Traversal")
+    node0 = BTNode("C")
+    node1 = BTNode("o")
+    node2 = BTNode("n")
+    node3 = BTNode("O")
+    node4 = BTNode("r")
+
+    node3.setLeftChild(node1)
+    node1.setParent(node3)
+    node3.setRightChild(node4)
+    node4.setParent(node3)
+    node1.setLeftChild(node0)
+    node0.setParent(node1)
+    node1.setRightChild(node2)
+    node2.setParent(node1)
+
+    print("v0")
+    inorder_traversal_v0(node3)
 
 
 if __name__ == '__main__':
