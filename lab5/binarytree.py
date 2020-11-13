@@ -44,6 +44,22 @@ class BTNode:
         """Change the Right Child of the node."""
         self.right = rightchild
 
+    def __str__(self):
+        """Return a string representation of the Node."""
+        if self.parent is None:
+            parent = "*"
+        else:
+            parent = str(self.parent.element)
+        if self.left is None:
+            left = "*"
+        else:
+            left = str(self.left.element)
+        if self.right is None:
+            right = "*"
+        else:
+            right = str(self.right.element)
+        return "{}, [{}, {}] -- {}".format(self.element, left, right, parent)
+
 
 def main():
     """Test methods for Binary Tree class."""
