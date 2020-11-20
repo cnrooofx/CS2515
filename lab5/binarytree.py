@@ -11,40 +11,41 @@ class BTNode:
         self.left = leftchild
         self.right = rightchild
 
-    def getElement(self):
+    def get_element(self):
         """Return the element in the node."""
         return self.element
 
-    def setElement(self, element):
+    def set_element(self, element):
         """Change the element in the node."""
         self.element = element
 
-    def getParent(self):
+    def get_parent(self):
         """Return the parent of the node."""
         return self.parent
 
-    def setParent(self, parent):
+    def set_parent(self, parent):
         """Change the parent of the node."""
         self.parent = parent
 
-    def getLeftChild(self):
+    def get_left_child(self):
         """Return the Left Child of the node."""
         return self.left
 
-    def setLeftChild(self, leftchild):
+    def set_left_child(self, leftchild):
         """Change the Left Child of the node."""
         self.left = leftchild
+        leftchild.parent = self
 
-    def getRightChild(self):
+    def get_right_child(self):
         """Return the Right Child of the node."""
-        return self.left
         return self.right
 
-    def setRightChild(self, rightchild):
+    def set_right_child(self, rightchild):
         """Change the Right Child of the node."""
         self.right = rightchild
+        rightchild.parent = self
 
-    def removeLeft(self):
+    def remove_left(self):
         """Remove and return the Left subtree."""
         if self.left is None:
             return None
@@ -53,7 +54,7 @@ class BTNode:
         self.left = None
         return left_tree
 
-    def removeRight(self):
+    def remove_right(self):
         """Remove and return the Right subtree."""
         if self.right is None:
             return None
@@ -61,6 +62,13 @@ class BTNode:
         right_tree = self.right
         self.right = None
         return right_tree
+
+    def inorder(self):
+        if self.left is None:
+            return self.element
+        elif self.right is None:
+            return self.element
+        return self.left.inorder()+self.element+self.right.inorder()
 
     def __str__(self):
         """Return a string representation of the Node."""
@@ -79,30 +87,30 @@ class BTNode:
         return "{}, [{}, {}] -- {}".format(self.element, left, right, parent)
 
 
-def inorder_traversal_v0(node):
+def inorder_traversal(node):
     if node.left is not None:
-        inorder_traversal_v0(node.left)
+        inorder_traversal(node.left)
     print(node.element)
     if node.right is not None:
-        inorder_traversal_v0(node.right)
+        inorder_traversal(node.right)
 
 
 def main():
     """Test methods for Binary Tree class."""
     print("Binary Tree Node")
     node = BTNode("A")
-    print(node.getElement())
-    node.setElement("AA")
+    print(node.get_element())
+    node.set_element("AA")
     node2 = BTNode("B")
     node3 = BTNode("C")
-    node2.setParent(node)
-    print(node2.getParent())
-    node.setLeftChild(node2)
-    node3.setParent(node2)
-    node2.setRightChild(node3)
+    node2.set_parent(node)
+    print(node2.get_parent())
+    node.set_left_child(node2)
+    node3.set_parent(node2)
+    node2.set_right_child(node3)
     print(node)
     print(node2)
-    print(node.removeLeft())
+    print(node.remove_left())
     print(node)
 
     print("\nInorder Traversal")
@@ -111,19 +119,34 @@ def main():
     node2 = BTNode("n")
     node3 = BTNode("O")
     node4 = BTNode("r")
+    node3.set_left_child(node1)
+    node3.set_right_child(node4)
+    node1.set_left_child(node0)
+    node1.set_right_child(node2)
 
-    node3.setLeftChild(node1)
-    node1.setParent(node3)
-    node3.setRightChild(node4)
-    node4.setParent(node3)
-    node1.setLeftChild(node0)
-    node0.setParent(node1)
-    node1.setRightChild(node2)
-    node2.setParent(node1)
+    num1 = BTNode(1)
+    num2 = BTNode(2)
+    num3 = BTNode(3)
+    num4 = BTNode(4)
+    num5 = BTNode(5)
+    num6 = BTNode(6)
+    num7 = BTNode(7)
+    num8 = BTNode(8)
+    num9 = BTNode(9)
+    num6.set_left_child(num2)
+    num6.set_right_child(num8)
+    num2.set_left_child(num1)
+    num2.set_right_child(num4)
+    num4.set_left_child(num3)
+    num4.set_right_child(num5)
+    num8.set_left_child(num7)
+    num8.set_right_child(num9)
 
     print("v0")
-    inorder_traversal_v0(node3)
+    # inorder_traversal(node3)
+    # inorder_traversal(num6)
+    print(node3.inorder())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
