@@ -158,26 +158,42 @@ class BSTNode:
 
         Maintains the BST properties.
         """
-        #if this is a full node
-            #find the biggest item in the left tree
-            #  - there must be a left tree, since this is a full node
-            #  - the node for that item can have no right children
-            #move that item up into this item
-            #remove that old node, which is now a semileaf
-            #return the original element
-        #else if this has no children
-            #find who the parent was
-            #set the parent's appropriate child to None
-            #wipe this node
-            #return this node's element
-        #else if this has no right child (but must have a left child)
-            #shift leftchild up into its place, and clean up
-            #return the original element
-        #else this has no left child (but must have a right child)
-            #shift rightchild up into its place, and clean up
-            #return the original element
+        if self.full():
+            original_item = self._item  # Save item to be returned
+            big_node = self._left.findmaxnode()  # Biggest item on left
+            self._item = big_node._item  # Swap current item with biggest item
+            big_node.remove_node()  # Remove the previous biggest item's node
+            return original_item
 
-        # method body goes here
+        elif self.leaf():
+            parent = self._parent
+            if parent._left is self:
+                parent._left = None
+            elif parent._right is self:
+                parent._right = None
+
+        elif not self._right:
+            leftchild = self._left
+            parent = self._parent
+            leftchild._parent = parent
+            if parent._left is self:
+                parent._left = leftchild
+            elif parent._right is self:
+                parent._right = leftchild
+        else:
+            rightchild = self._right
+            parent = self._parent
+            rightchild._parent = parent
+            if parent._left is self:
+                parent._left = rightchild
+            elif parent._right is self:
+                parent._right = rightchild
+        original_item = self._item
+        self._item = None
+        self._left = None
+        self._right = None
+        self._parent = None
+        return original_item
 
     def _print_structure(self):
         """(Private) Print a structured representation of tree at this node."""
