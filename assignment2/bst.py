@@ -84,6 +84,10 @@ class BSTNode:
     def findmaxnode(self):
         """Return the BSTNode with maximal element at or below here."""
         # method body goes here
+        if not self._right:
+            return self
+        return self._right.findmaxnode()
+
 
     def height(self):
         """Return the height of this node.
