@@ -1,3 +1,10 @@
+"""CS2515 Assignment 2 Submission.
+
+Script Name: bst.py
+Author: Conor Fox 119322236
+"""
+
+
 class BSTNode:
     """An internal node for a Binary Search Tree."""
 
@@ -26,7 +33,18 @@ class BSTNode:
         Args:
             searchitem: an object of any class stored in the BST
         """
-        # method body goes here
+        # print(self._element, searchitem)
+        if self._element == searchitem:
+            print("element", self._element)
+            return self._element
+        elif self._element > searchitem:
+            if self._leftchild:
+                return self._leftchild.search(searchitem)
+        elif self._element < searchitem:
+            if self._rightchild:
+                return self._rightchild.search(searchitem)
+        return None
+
 
     def search_node(self, searchitem):
         """Return the BSTNode (with subtree) containing searchitem, or None.
@@ -41,7 +59,22 @@ class BSTNode:
 
         Returns the item added, or None if a matching object was already there.
         """
-        # method body goes here
+        if self.search(obj):
+            return None
+        elif obj < self._element:
+            if not self._leftchild:
+                new = BSTNode(obj)
+                self._leftchild = new
+                new._parent = self
+            else:
+                self._leftchild.add(obj)
+        elif obj > self._element:
+            if not self._rightchild:
+                new = BSTNode(obj)
+                self._rightchild = new
+                new._parent = self
+            else:
+                self._rightchild.add(obj)
 
     def findmaxnode(self):
         """Return the BSTNode with maximal element at or below here."""
