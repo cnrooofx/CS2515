@@ -10,9 +10,9 @@ class BSTNode:
 
     def __init__(self, item):
         """Initialise a BSTNode on creation, with value==item."""
-        self._element = item
-        self._leftchild = None
-        self._rightchild = None
+        self._item = item
+        self._left = None
+        self._right = None
         self._parent = None
 
     def __str__(self):
@@ -33,16 +33,15 @@ class BSTNode:
         Args:
             searchitem: an object of any class stored in the BST
         """
-        if self._element > searchitem:
-            if not self._leftchild:
+        if self._item > searchitem:
+            if not self._left:
                 return None
-            return self._leftchild.search(searchitem)
-        elif self._element < searchitem:
-            if not self._rightchild:
+            return self._left.search(searchitem)
+        elif self._item < searchitem:
+            if not self._right:
                 return None
-            return self._rightchild.search(searchitem)
-        return self._element
-
+            return self._right.search(searchitem)
+        return self._item
 
     def search_node(self, searchitem):
         """Return the BSTNode (with subtree) containing searchitem, or None.
@@ -50,14 +49,14 @@ class BSTNode:
         Args:
             searchitem: an object of any class stored in the BST
         """
-        if self._element > searchitem:
-            if not self._leftchild:
+        if self._item > searchitem:
+            if not self._left:
                 return None
-            return self._leftchild.search(searchitem)
-        elif self._element < searchitem:
-            if not self._rightchild:
+            return self._left.search_node(searchitem)
+        elif self._item < searchitem:
+            if not self._right:
                 return None
-            return self._rightchild.search(searchitem)
+            return self._right.search_node(searchitem)
         return self
 
     def add(self, obj):
@@ -67,20 +66,20 @@ class BSTNode:
         """
         if self.search(obj):
             return None
-        elif obj < self._element:
-            if not self._leftchild:
+        elif obj < self._item:
+            if not self._left:
                 new = BSTNode(obj)
-                self._leftchild = new
+                self._left = new
                 new._parent = self
             else:
-                self._leftchild.add(obj)
-        elif obj > self._element:
-            if not self._rightchild:
+                self._left.add(obj)
+        elif obj > self._item:
+            if not self._right:
                 new = BSTNode(obj)
-                self._rightchild = new
+                self._right = new
                 new._parent = self
             else:
-                self._rightchild.add(obj)
+                self._right.add(obj)
 
     def findmaxnode(self):
         """Return the BSTNode with maximal element at or below here."""
@@ -159,24 +158,24 @@ class BSTNode:
         """(Private) Print a structured representation of tree at this node."""
         if self._isthisapropertree() is False:
             print("ERROR: this is not a proper Binary Search Tree. ++++++++++")
-        outstr = str(self._element) + ' (hgt=' + str(self.height()) + ')['
-        if self._leftchild is not None:
-            outstr = outstr + "left: " + str(self._leftchild._element)
+        outstr = str(self._item) + ' (hgt=' + str(self.height()) + ')['
+        if self._left is not None:
+            outstr = outstr + "left: " + str(self._left._item)
         else:
             outstr = outstr + 'left: *'
-        if self._rightchild is not None:
-            outstr += "; right: " + str(self._rightchild._element) + ']'
+        if self._right is not None:
+            outstr += "; right: " + str(self._right._item) + ']'
         else:
             outstr = outstr + '; right: *]'
         if self._parent is not None:
-            outstr = outstr + ' -- parent: ' + str(self._parent._element)
+            outstr = outstr + ' -- parent: ' + str(self._parent._item)
         else:
             outstr = outstr + ' -- parent: *'
         print(outstr)
-        if self._leftchild is not None:
-            self._leftchild._print_structure()
-        if self._rightchild is not None:
-            self._rightchild._print_structure()
+        if self._left is not None:
+            self._left._print_structure()
+        if self._right is not None:
+            self._right._print_structure()
 
     def _properBST(self):
         """ Return True if this is the root of a proper BST; False otherwise.
@@ -199,17 +198,17 @@ class BSTNode:
                 minvalue is the lowest value in this subtree
                 maxvalue is the highest value in this subtree
         """
-        minvalue = self._element
-        maxvalue = self._element
-        if self._leftchild is not None:
-            leftstate = self._leftchild._BSTproperties()
-            if not leftstate[0] or leftstate[2] > self._element:
+        minvalue = self._item
+        maxvalue = self._item
+        if self._left is not None:
+            leftstate = self._left._BSTproperties()
+            if not leftstate[0] or leftstate[2] > self._item:
                 return (False, None, None)
             minvalue = leftstate[1]
 
-        if self._rightchild is not None:
-            rightstate = self._rightchild._BSTproperties()
-            if not rightstate[0] or rightstate[1] < self._element:
+        if self._right is not None:
+            rightstate = self._right._BSTproperties()
+            if not rightstate[0] or rightstate[1] < self._item:
                 return (False, None, None)
             maxvalue = rightstate[2]
 
@@ -218,18 +217,18 @@ class BSTNode:
     def _isthisapropertree(self):
         """ Return True if this node is a properly implemented tree. """
         ok = True
-        if self._leftchild is not None:
-            if self._leftchild._parent != self:
+        if self._left is not None:
+            if self._left._parent != self:
                 ok = False
-            if self._leftchild._isthisapropertree() is False:
+            if self._left._isthisapropertree() is False:
                 ok = False
-        if self._rightchild is not None:
-            if self._rightchild._parent != self:
+        if self._right is not None:
+            if self._right._parent != self:
                 ok = False
-            if self._rightchild._isthisapropertree() is False:
+            if self._right._isthisapropertree() is False:
                 ok = False
         if self._parent is not None:
-            if (self._parent._leftchild != self
-                    and self._parent._rightchild != self):
+            if (self._parent._left != self
+                    and self._parent._right != self):
                 ok = False
         return ok
