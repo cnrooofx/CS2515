@@ -33,17 +33,15 @@ class BSTNode:
         Args:
             searchitem: an object of any class stored in the BST
         """
-        # print(self._element, searchitem)
-        if self._element == searchitem:
-            print("element", self._element)
-            return self._element
-        elif self._element > searchitem:
-            if self._leftchild:
-                return self._leftchild.search(searchitem)
+        if self._element > searchitem:
+            if not self._leftchild:
+                return None
+            return self._leftchild.search(searchitem)
         elif self._element < searchitem:
-            if self._rightchild:
-                return self._rightchild.search(searchitem)
-        return None
+            if not self._rightchild:
+                return None
+            return self._rightchild.search(searchitem)
+        return self._element
 
 
     def search_node(self, searchitem):
@@ -52,7 +50,15 @@ class BSTNode:
         Args:
             searchitem: an object of any class stored in the BST
         """
-        # method body goes here
+        if self._element > searchitem:
+            if not self._leftchild:
+                return None
+            return self._leftchild.search(searchitem)
+        elif self._element < searchitem:
+            if not self._rightchild:
+                return None
+            return self._rightchild.search(searchitem)
+        return self
 
     def add(self, obj):
         """Add item to the tree, maintaining BST properties.
