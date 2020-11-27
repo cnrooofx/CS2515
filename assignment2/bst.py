@@ -160,52 +160,57 @@ class BSTNode:
         Maintains the BST properties.
         """
         node = self.search_node(searchitem)
-        if not node:
-            return None
-        original_item = node._item
-        node.remove_node()
-        return original_item
+        if node:
+            original_item = node._item
+            node.remove_node()
+            return original_item
 
     def remove_node(self):
         """Remove this BSTNode from its tree, and return its element.
 
         Maintains the BST properties.
         """
+        original_item = self._item
         if self.full():
-            original_item = self._item  # Save item to be returned
             big_node = self._left.findmaxnode()  # Biggest item on left
             self._item = big_node._item  # Swap current item with biggest item
             big_node.remove_node()  # Remove the previous biggest item's node
-            return original_item
-
         elif self.leaf():
             parent = self._parent
-            if parent._left is self:
-                parent._left = None
-            elif parent._right is self:
-                parent._right = None
-
+            if parent is not None:
+                if parent._left is self:
+                    parent._left = None
+                elif parent._right is self:
+                    parent._right = None
+            self.clear_node()
         elif not self._right:
             leftchild = self._left
-            parent = self._parent
-            leftchild._parent = parent
-            if parent._left is self:
-                parent._left = leftchild
-            elif parent._right is self:
-                parent._right = leftchild
+            self._item = leftchild._item
+            if leftchild._left:
+                self._left = leftchild._left
+                leftchild._left._parent = self
+            else:
+                self._left = None
+            if leftchild._right:
+                self._right = leftchild._right
+                leftchild._right._parent = self
+            else:
+                self._right = None
+            leftchild.clear_node()
         else:
             rightchild = self._right
-            parent = self._parent
-            rightchild._parent = parent
-            if parent._left is self:
-                parent._left = rightchild
-            elif parent._right is self:
-                parent._right = rightchild
-        original_item = self._item
-        self._item = None
-        self._left = None
-        self._right = None
-        self._parent = None
+            self._item = rightchild._item
+            if rightchild._left:
+                rightchild._left._parent = self
+                self._left = rightchild._left
+            else:
+                self._left = None
+            if rightchild._right:
+                rightchild._right._parent = self
+                self._right = rightchild._right
+            else:
+                self._right = None
+            rightchild.clear_node()
         return original_item
 
     def _print_structure(self):
@@ -232,7 +237,7 @@ class BSTNode:
             self._right._print_structure()
 
     def _properBST(self):
-        """ Return True if this is the root of a proper BST; False otherwise.
+        """Return True if this is the root of a proper BST; False otherwise.
 
         First checks that this is a proper tree (i.e. parent and child
         references all link up properly.
@@ -244,7 +249,7 @@ class BSTNode:
         return self._BSTproperties()[0]
 
     def _BSTproperties(self):
-        """ Return a tuple describing state of this node as root of a BST.
+        """Return a tuple describing state of this node as root of a BST.
 
         Returns:
             (boolean, minvalue, maxvalue):
@@ -269,7 +274,7 @@ class BSTNode:
         return (True, minvalue, maxvalue)
 
     def _isthisapropertree(self):
-        """ Return True if this node is a properly implemented tree. """
+        """Return True if this node is a properly implemented tree."""
         ok = True
         if self._left is not None:
             if self._left._parent != self:
@@ -286,3 +291,9 @@ class BSTNode:
                     and self._parent._right != self):
                 ok = False
         return ok
+
+    def clear_node(self):
+        self._item = None
+        self._parent = None
+        self._left = None
+        self._right = None
