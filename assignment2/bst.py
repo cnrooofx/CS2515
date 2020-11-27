@@ -23,10 +23,10 @@ class BSTNode:
         if self._left is None and self._right is None:
             return str(self._item)
         elif self._right is None and self._left is not None:
-            return self._right.__str__() + str(self._item)
+            return self._left.__str__() + ", " + str(self._item)
         elif self._left is None and self._right is not None:
-            return str(self._item) + self._right.__str__()
-        return self._left.__str__() + str(self._item) + self._right.__str__()
+            return str(self._item) + ", " + self._right.__str__()
+        return str(self._left)+", "+str(self._item)+", "+str(self._right)
 
     def _stats(self):
         """Return the basic stats on the tree."""
@@ -39,15 +39,9 @@ class BSTNode:
         Args:
             searchitem: an object of any class stored in the BST
         """
-        if self._item > searchitem:
-            if not self._left:
-                return None
-            return self._left.search(searchitem)
-        elif self._item < searchitem:
-            if not self._right:
-                return None
-            return self._right.search(searchitem)
-        return self._item
+        node = self.search_node(searchitem)
+        if node is not None:
+            return node._item
 
     def search_node(self, searchitem):
         """Return the BSTNode (with subtree) containing searchitem, or None.
@@ -55,7 +49,13 @@ class BSTNode:
         Args:
             searchitem: an object of any class stored in the BST
         """
-        if self._item > searchitem:
+        if self._item is None:
+            return None
+        elif self._item == searchitem:
+            pass
+        elif not self._left and not self._right:
+            return None
+        elif searchitem < self._item:
             if not self._left:
                 return None
             return self._left.search_node(searchitem)
@@ -70,7 +70,9 @@ class BSTNode:
 
         Returns the item added, or None if a matching object was already there.
         """
-        if self.search(obj):
+        if self._item is None:
+            self._item = obj
+        elif self.search(obj):
             return None
         elif obj < self._item:
             if not self._left:
@@ -86,10 +88,10 @@ class BSTNode:
                 new._parent = self
             else:
                 self._right.add(obj)
+        return obj
 
     def findmaxnode(self):
         """Return the BSTNode with maximal element at or below here."""
-        # method body goes here
         if not self._right:
             return self
         return self._right.findmaxnode()
