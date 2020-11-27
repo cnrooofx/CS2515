@@ -20,7 +20,13 @@ class BSTNode:
 
         The string will be created by an in-order traversal.
         """
-        # method body goes here
+        if self._left is None and self._right is None:
+            return str(self._item)
+        elif self._right is None and self._left is not None:
+            return self._right.__str__() + str(self._item)
+        elif self._left is None and self._right is not None:
+            return str(self._item) + self._right.__str__()
+        return self._left.__str__() + str(self._item) + self._right.__str__()
 
     def _stats(self):
         """Return the basic stats on the tree."""
