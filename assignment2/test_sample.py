@@ -42,7 +42,7 @@ class TestClass:
         return False
 
 
-def _testadd():
+def testadd():
     node = BSTNode(TestClass("Memento", "11/10/2000"))
     node._print_structure()
     print('> adding Melvin and Howard')
@@ -60,7 +60,7 @@ def _testadd():
     return node
 
 
-def _test():
+def test():
     node = BSTNode(TestClass("B", "b"))
     print('Ordered:', node)
     node._print_structure()
@@ -155,6 +155,6 @@ def _test():
     print(node)
 
 
-BSTNode._testadd()
+testadd()
 print('++++++++++')
-BSTNode._test()
+test()
