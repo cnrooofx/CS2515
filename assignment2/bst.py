@@ -88,14 +88,19 @@ class BSTNode:
             return self
         return self._right.findmaxnode()
 
-
     def height(self):
         """Return the height of this node.
 
         Note that with the recursive definition of the tree the height of the
         node is the same as the depth of the tree rooted at this node.
         """
-        # method body goes here
+        if not self._left and not self._right:
+            return 0
+        elif self._left and not self._right:
+            return 1 + self._left.height()
+        elif self._right and not self._left:
+            return 1 + self._right.height()
+        return 1 + max(self._left.height(), self._right.height())
 
     def size(self):
         """Return the size of this subtree.
