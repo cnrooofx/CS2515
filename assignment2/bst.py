@@ -108,23 +108,39 @@ class BSTNode:
         The size is the number of nodes (or elements) in the tree,
         including this node.
         """
-        # method body goes here
+        if not self._left and not self._right:
+            return 1
+        elif self._left and not self._right:
+            return 1 + self._left.size()
+        elif self._right and not self._left:
+            return 1 + self._right.size()
+        return 1 + self._left.size() + self._right.size()
 
     def leaf(self):
         """Return True if this node has no children."""
-        # method body goes here
+        if not self._left and not self._right:
+            return True
+        return False
 
     def semileaf(self):
         """Return True if this node has exactly one child."""
-        # method body goes here
+        if self._left and not self._right:
+            return True
+        elif not self._left and self._right:
+            return True
+        return False
 
     def full(self):
         """Return true if this node has two children."""
-        # method body goes here
+        if self._left and self._right:
+            return True
+        return False
 
     def internal(self):
         """Return True if this node has at least one child."""
-        # method body goes here
+        if self._left or self._right:
+            return True
+        return False
 
     def remove(self, searchitem):
         """Remove and return the object matching searchitem, if there.
