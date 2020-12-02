@@ -23,15 +23,10 @@ class BSTNode:
         if self._left is None and self._right is None:
             return str(self._item)
         elif self._right is None and self._left is not None:
-            return self._left.__str__() + ", " + str(self._item)
+            return str(self._left) + ", " + str(self._item)
         elif self._left is None and self._right is not None:
-            return str(self._item) + ", " + self._right.__str__()
+            return str(self._item) + ", " + str(self._right)
         return str(self._left)+", "+str(self._item)+", "+str(self._right)
-
-    def _stats(self):
-        """Return the basic stats on the tree."""
-        return ('size = ' + str(self.size())
-                + '; height = ' + str(self.height()))
 
     def search(self, searchitem):
         """Return object matching searchitem, or None.
@@ -177,21 +172,21 @@ class BSTNode:
             big_node.remove_node()  # Remove the previous biggest item's node
         elif self.leaf():
             parent = self._parent
-            if parent is not None:
-                if parent._left is self:
+            if parent is not None:  # If node has a parent,
+                if parent._left is self:  # Set parent's child ref to None
                     parent._left = None
                 elif parent._right is self:
                     parent._right = None
             self.clear_node()
         elif not self._right:
             leftchild = self._left
-            self._item = leftchild._item
-            if leftchild._left:
+            self._item = leftchild._item  # Move item from leftchild to self
+            if leftchild._left:  # Link leftchild's leftchild to self
                 self._left = leftchild._left
                 leftchild._left._parent = self
             else:
                 self._left = None
-            if leftchild._right:
+            if leftchild._right:  # Link leftchild's rightchild to self
                 self._right = leftchild._right
                 leftchild._right._parent = self
             else:
@@ -212,6 +207,12 @@ class BSTNode:
                 self._right = None
             rightchild.clear_node()
         return original_item
+
+    def clear_node(self):
+        self._item = None
+        self._parent = None
+        self._left = None
+        self._right = None
 
     def _print_structure(self):
         """(Private) Print a structured representation of tree at this node."""
@@ -291,9 +292,3 @@ class BSTNode:
                     and self._parent._right != self):
                 ok = False
         return ok
-
-    def clear_node(self):
-        self._item = None
-        self._parent = None
-        self._left = None
-        self._right = None
