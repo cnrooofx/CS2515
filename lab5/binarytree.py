@@ -68,7 +68,12 @@ class BTNode:
             return self.element
         elif self.right is None:
             return self.element
-        return self.left.inorder()+self.element+self.right.inorder()
+        return self.left.inorder() + self.element + self.right.inorder()
+
+    def height(self):
+        if self.right is None and self.left is None:
+            return 1
+        return max(self.left.height(), self.right.height()) + 1
 
     def __str__(self):
         """Return a string representation of the Node."""
@@ -146,6 +151,7 @@ def main():
     # inorder_traversal(node3)
     # inorder_traversal(num6)
     print(node3.inorder())
+    print(node3.height())
 
 
 if __name__ == "__main__":
