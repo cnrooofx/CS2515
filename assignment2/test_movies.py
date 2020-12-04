@@ -6,7 +6,7 @@ def build_library(filename):
     """ Return a library of Movie files built from filename """
 
     # open the file
-    file = open(filename, 'r')
+    file = open(filename, 'r', encoding="utf8")
 
     # create the library
     library = MovieLib()
