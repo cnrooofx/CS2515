@@ -14,6 +14,7 @@ class BSTNode:
         self._left = None
         self._right = None
         self._parent = None
+        self._height = 0
 
     def __str__(self):
         """Return a string representation of the tree rooted at this node.
@@ -83,6 +84,7 @@ class BSTNode:
                 new._parent = self
             else:
                 self._right.add(obj)
+        self._height = self.height()
         return obj
 
     def findmaxnode(self):
@@ -177,7 +179,8 @@ class BSTNode:
                     parent._left = None
                 elif parent._right is self:
                     parent._right = None
-            self.clear_node()
+                parent._update_height()
+            self._clear_node()
         elif not self._right:
             leftchild = self._left
             self._item = leftchild._item  # Move item from leftchild to self
@@ -191,7 +194,8 @@ class BSTNode:
                 leftchild._right._parent = self
             else:
                 self._right = None
-            leftchild.clear_node()
+            leftchild._clear_node()
+            self._update_height()
         else:
             rightchild = self._right
             self._item = rightchild._item
@@ -205,10 +209,16 @@ class BSTNode:
                 self._right = rightchild._right
             else:
                 self._right = None
-            rightchild.clear_node()
+            rightchild._clear_node()
+            self._update_height()
         return original_item
 
-    def clear_node(self):
+    def _update_height(self):
+        self._height = self.height()
+        if self._parent is not None:
+            self._parent._update_height()
+
+    def _clear_node(self):
         self._item = None
         self._parent = None
         self._left = None
@@ -218,7 +228,7 @@ class BSTNode:
         """(Private) Print a structured representation of tree at this node."""
         if self._isthisapropertree() is False:
             print("ERROR: this is not a proper Binary Search Tree. ++++++++++")
-        outstr = str(self._item) + ' (hgt=' + str(self.height()) + ')['
+        outstr = str(self._item) + ' (hgt=' + str(self._height) + ')['
         if self._left is not None:
             outstr = outstr + "left: " + str(self._left._item)
         else:
