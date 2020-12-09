@@ -14,7 +14,6 @@ class BSTNode:
         self._left = None
         self._right = None
         self._parent = None
-        self._height = 0
 
     def __str__(self):
         """Return a string representation of the tree rooted at this node.
@@ -84,7 +83,6 @@ class BSTNode:
                 new._parent = self
             else:
                 self._right.add(obj)
-        self._update_height()
         return obj
 
     def findmaxnode(self):
@@ -99,7 +97,13 @@ class BSTNode:
         Note that with the recursive definition of the tree the height of the
         node is the same as the depth of the tree rooted at this node.
         """
-        return self._height
+        if not self._left and not self._right:
+            return 0
+        elif self._left and not self._right:
+            return 1 + self._left.height()
+        elif self._right and not self._left:
+            return 1 + self._right.height()
+        return 1 + max(self._left.height(), self._right.height())
 
     def size(self):
         """Return the size of this subtree.
@@ -173,8 +177,7 @@ class BSTNode:
                     parent._left = None
                 elif parent._right is self:
                     parent._right = None
-                parent._update_height()
-            self._clear_node()
+            self.clear_node()
         elif not self._right:
             leftchild = self._left
             self._item = leftchild._item  # Move item from leftchild to self
@@ -188,8 +191,7 @@ class BSTNode:
                 leftchild._right._parent = self
             else:
                 self._right = None
-            leftchild._clear_node()
-            self._update_height()
+            leftchild.clear_node()
         else:
             rightchild = self._right
             self._item = rightchild._item
@@ -203,31 +205,11 @@ class BSTNode:
                 self._right = rightchild._right
             else:
                 self._right = None
-            rightchild._clear_node()
-            self._update_height()
+            rightchild.clear_node()
         return original_item
 
-    def _update_height(self):
-        self._height = self.height()
-        self._height = self._get_height()
-        if self._parent is not None:
-            self._parent._update_height()
-
-    def _get_height(self):
-        """Return the height of this node.
-
-        Note that with the recursive definition of the tree the height of the
-        node is the same as the depth of the tree rooted at this node.
-        """
-        if not self._left and not self._right:
-            return 0
-        elif self._left and not self._right:
-            return 1 + self._left._get_height()
-        elif self._right and not self._left:
-            return 1 + self._right._get_height()
-        return 1 + max(self._left._get_height(), self._right._get_height())
-
-    def _clear_node(self):
+    def clear_node(self):
+        """Set all of the attributes in the node to None."""
         self._item = None
         self._parent = None
         self._left = None
@@ -237,7 +219,7 @@ class BSTNode:
         """(Private) Print a structured representation of tree at this node."""
         if self._isthisapropertree() is False:
             print("ERROR: this is not a proper Binary Search Tree. ++++++++++")
-        outstr = str(self._item) + ' (hgt=' + str(self._height) + ')['
+        outstr = str(self._item) + ' (hgt=' + str(self.height()) + ')['
         if self._left is not None:
             outstr = outstr + "left: " + str(self._left._item)
         else:
@@ -261,7 +243,6 @@ class BSTNode:
 
         First checks that this is a proper tree (i.e. parent and child
         references all link up properly.
-
         Then checks that it obeys the BST property.
         """
         if not self._isthisapropertree():
