@@ -80,9 +80,7 @@ class MovieLib:
         Args:
             title: a string representing a movie title.
         """
-        output = self.bst.search(Movie(title))
-        if output is not None:
-            return output.get_title()
+        return self.bst.search(Movie(title))
 
     def add(self, title, date, runtime):
         """Add a new movie to the library.
@@ -103,5 +101,4 @@ class MovieLib:
         Args:
             title - the title of the movie to be removed
         """
-        search_movie = Movie(title)
-        return self.bst.remove(search_movie)
+        return self.bst.remove(Movie(title))
