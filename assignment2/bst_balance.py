@@ -84,7 +84,6 @@ class BSTNode:
                 new._parent = self
             else:
                 self._right.add(obj)
-        # self._update_height()
         if self._parent:
             self._parent._rebalance()
         return obj
@@ -176,7 +175,6 @@ class BSTNode:
                     parent._left = None
                 elif parent._right is self:
                     parent._right = None
-                # parent._update_height()
                 parent._rebalance()
             self._clear_node()
         elif not self._right:
@@ -193,7 +191,6 @@ class BSTNode:
             else:
                 self._right = None
             leftchild._clear_node()
-            # self._update_height()
             if parent:
                 parent._rebalance()
         else:
@@ -210,7 +207,6 @@ class BSTNode:
             else:
                 self._right = None
             rightchild._clear_node()
-            # self._update_height()
             if parent:
                 parent._rebalance()
         return original_item
@@ -223,46 +219,85 @@ class BSTNode:
             self._restructure()
             if prev_parent:
                 prev_parent._rebalance()
-        else:
-            if self._height != prev_height and self._parent:
-                self._parent._rebalance()
+        elif self._height != prev_height and self._parent:
+            self._parent._rebalance()
 
     def _restructure(self):
         if self._left and self._right:
             if self._left._height > self._right._height:
-                # restructure left
-                pass
+                self._restructure_left()
             else:
-                # restructure right
-                pass
+                self._restructure_right()
         elif self._left and not self._right:
-            # restructure left
-            pass
+            self._restructure_left()
         else:
-            # restructure right
-            pass
+            self._restructure_right()
+
+    def _restructure_left(self):
+        left = self._left
+        if left._left and left._right:
+            if left._right._height > left._left._height:
+                left._rotate_rightchild()
+        elif left._right and not left._left:
+            left._rotate_rightchild()
+        self._rotate_leftchild()
+
+    def _restructure_right(self):
+        right = self._right
+        if right._left and right._right:
+            if right._left._height < right._right._height:
+                right._rotate_leftchild()
+        elif right._left and not right._right:
+            right._rotate_leftchild()
+        self._rotate_rightchild()
+
+    def _rotate_leftchild(self):
+        left = self._left
+
+        if left._right:
+            self._left = left._right
+            left._right._parent = self
+        else:
+            self._left = None
+        left._right = self
+        left._parent = self._parent
+        if self._parent is not None:
+            if self._parent._left is self:
+                self._parent._left = left
+            else:
+                self._parent._right = left
+        self._parent = left
+        self = left
+
+    def _rotate_rightchild(self):
+        right = self._right
+
+        if right._left:
+            self._right = right._left
+            right._left._parent = self
+        else:
+            self._right = None
+        right._left = self
+        right._parent = self._parent
+        if self._parent is not None:
+            if self._parent._left is self:
+                self._parent._left = right
+            else:
+                self._parent._right = right
+        self._parent = right
+        self = right
 
     def _unbalanced(self):
         if self._left or self._right:
             if self._left and self._right:
                 if abs(self._left._height - self._right._height) >= 2:
                     return True
-            elif self._left and not self._right and self._left._height >= 2:
-                return True
+            elif self._left and not self._right:
+                if self._left._height >= 2:
+                    return True
             elif self._right._height >= 2:
                 return True
-            # elif self._left and not self._right:
-            #     if self._left._height >= 2:
-            #         return True
-            # else:
-            #     if self._right._height >= 2:
-            #         return True
         return False
-
-    def _update_height(self):
-        self._height = self._get_height()
-        if self._parent is not None:
-            self._parent._update_height()
 
     def _get_height(self):
         """Return the height of this node.
