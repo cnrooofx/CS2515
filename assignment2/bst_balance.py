@@ -100,7 +100,13 @@ class BSTNode:
         Note that with the recursive definition of the tree the height of the
         node is the same as the depth of the tree rooted at this node.
         """
-        return self._height
+        if not self._left and not self._right:
+            return 0
+        elif self._left and not self._right:
+            return 1 + self._left.height()
+        elif self._right and not self._left:
+            return 1 + self._right.height()
+        return 1 + max(self._left.height(), self._right.height())
 
     def size(self):
         """Return the size of this subtree.
@@ -213,7 +219,7 @@ class BSTNode:
 
     def _rebalance(self):
         prev_height = self._height
-        height = self._get_height()
+        height = self.height()
         self._height = height
         if self._unbalanced():
             if self._left and self._right:
@@ -270,8 +276,8 @@ class BSTNode:
         else:
             self._right = None
         self._right = left
-        self._height = self._get_height()
-        left._height = left._get_height()
+        self._height = self.height()
+        left._height = left.height()
 
     def _rotate_rightchild(self):
         right = self._right
@@ -294,8 +300,8 @@ class BSTNode:
         else:
             right._left = None
         self._left = right
-        self._height = self._get_height()
-        right._height = right._get_height()
+        self._height = self.height()
+        right._height = right.height()
 
     def _unbalanced(self):
         if self._left or self._right:
@@ -308,20 +314,6 @@ class BSTNode:
             elif self._right._height >= 2:
                 return True
         return False
-
-    def _get_height(self):
-        """Return the height of this node.
-
-        Note that with the recursive definition of the tree the height of the
-        node is the same as the depth of the tree rooted at this node.
-        """
-        if not self._left and not self._right:
-            return 0
-        elif self._left and not self._right:
-            return 1 + self._left._get_height()
-        elif self._right and not self._left:
-            return 1 + self._right._get_height()
-        return 1 + max(self._left._get_height(), self._right._get_height())
 
     def _clear_node(self):
         self._item = None
