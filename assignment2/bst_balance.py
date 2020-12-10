@@ -213,25 +213,23 @@ class BSTNode:
 
     def _rebalance(self):
         prev_height = self._height
-        self._height = self._get_height()
+        height = self._get_height()
+        self._height = height
         if self._unbalanced():
-            prev_parent = self._parent
-            self._restructure()
-            if prev_parent:
-                prev_parent._rebalance()
-        elif self._height != prev_height and self._parent:
-            self._parent._rebalance()
-
-    def _restructure(self):
-        if self._left and self._right:
-            if self._left._height > self._right._height:
+            if self._left and self._right:
+                if self._left._height > self._right._height:
+                    self._restructure_left()
+                else:
+                    self._restructure_right()
+            elif self._left and not self._right:
                 self._restructure_left()
             else:
                 self._restructure_right()
-        elif self._left and not self._right:
-            self._restructure_left()
-        else:
-            self._restructure_right()
+
+            if self._parent:
+                self._parent._rebalance()
+        elif self._height != prev_height and self._parent:
+            self._parent._rebalance()
 
     def _restructure_left(self):
         left = self._left
@@ -253,39 +251,51 @@ class BSTNode:
 
     def _rotate_leftchild(self):
         left = self._left
+        self_item = self._item
+        self._item = left._item
+        left._item = self_item
 
-        if left._right:
-            self._left = left._right
-            left._right._parent = self
+        if left._left:
+            self._left = left._left
+            left._left._parent = self
         else:
             self._left = None
-        left._right = self
-        left._parent = self._parent
-        if self._parent is not None:
-            if self._parent._left is self:
-                self._parent._left = left
-            else:
-                self._parent._right = left
-        self._parent = left
-        self = left
+        if left._right:
+            left._left = left._right
+        else:
+            left._left = None
+        if self._right:
+            left._right = self._right
+            self._right._parent = left
+        else:
+            self._right = None
+        self._right = left
+        self._height = self._get_height()
+        left._height = left._get_height()
 
     def _rotate_rightchild(self):
         right = self._right
+        self_item = self._item
+        self._item = right._item
+        right._item = self_item
 
-        if right._left:
-            self._right = right._left
-            right._left._parent = self
+        if right._right:
+            self._right = right._right
+            right._right._parent = self
         else:
             self._right = None
-        right._left = self
-        right._parent = self._parent
-        if self._parent is not None:
-            if self._parent._left is self:
-                self._parent._left = right
-            else:
-                self._parent._right = right
-        self._parent = right
-        self = right
+        if right._left:
+            right._right = right._left
+        else:
+            right._right = None
+        if self._left:
+            right._left = self._left
+            self._left._parent = right
+        else:
+            right._left = None
+        self._left = right
+        self._height = self._get_height()
+        right._height = right._get_height()
 
     def _unbalanced(self):
         if self._left or self._right:
