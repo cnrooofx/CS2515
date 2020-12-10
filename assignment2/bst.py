@@ -177,7 +177,7 @@ class BSTNode:
                     parent._left = None
                 elif parent._right is self:
                     parent._right = None
-            self.clear_node()
+            self._clear_node()
         elif not self._right:
             leftchild = self._left
             self._item = leftchild._item  # Move item from leftchild to self
@@ -191,7 +191,7 @@ class BSTNode:
                 leftchild._right._parent = self
             else:
                 self._right = None
-            leftchild.clear_node()
+            leftchild._clear_node()
         else:
             rightchild = self._right
             self._item = rightchild._item
@@ -205,10 +205,10 @@ class BSTNode:
                 self._right = rightchild._right
             else:
                 self._right = None
-            rightchild.clear_node()
+            rightchild._clear_node()
         return original_item
 
-    def clear_node(self):
+    def _clear_node(self):
         """Set all of the attributes in the node to None."""
         self._item = None
         self._parent = None
