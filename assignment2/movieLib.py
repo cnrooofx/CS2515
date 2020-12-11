@@ -209,7 +209,7 @@ def build_library(filename):
     # library
     for line in file:
         filecount += 1
-        inputlist = line.split('\t')
+        inputlist = line.split("\t")
         added = library.add(inputlist[0], inputlist[1], inputlist[2])
         if added is not None:
             count += 1

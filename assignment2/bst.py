@@ -29,13 +29,13 @@ class TestClass:
 
     def __eq__(self, other):
         """Return True if this object has exactly same field1 as other."""
-        if (other._field1 == self._field1):
+        if other._field1 == self._field1:
             return True
         return False
 
     def __ne__(self, other):
         """Return False if this object has exactly same field1 as other."""
-        return not (self._field1 == other._field1)
+        return not self._field1 == other._field1
 
     def __lt__(self, other):
         """Return True if this object is ordered before other.
@@ -74,7 +74,7 @@ class BSTNode:
     def _stats(self):
         """Return the basic stats on the tree."""
         return ("size = " + str(self.size())
-                + '; height = ' + str(self.height()))
+                + "; height = " + str(self.height()))
 
     def search(self, searchitem):
         """Return object matching searchitem, or None.
@@ -381,19 +381,19 @@ class BSTNode:
         """(Private) Print a structured representation of tree at this node."""
         if self._isthisapropertree() is False:
             print("ERROR: this is not a proper Binary Search Tree. ++++++++++")
-        outstr = str(self._item) + ' (hgt=' + str(self._height) + ')['
+        outstr = str(self._item) + " (hgt=" + str(self._height) + ")["
         if self._left is not None:
             outstr = outstr + "left: " + str(self._left._item)
         else:
-            outstr = outstr + 'left: *'
+            outstr = outstr + "left: *"
         if self._right is not None:
-            outstr += "; right: " + str(self._right._item) + ']'
+            outstr += "; right: " + str(self._right._item) + "]"
         else:
-            outstr = outstr + '; right: *]'
+            outstr = outstr + "; right: *]"
         if self._parent is not None:
-            outstr = outstr + ' -- parent: ' + str(self._parent._item)
+            outstr = outstr + " -- parent: " + str(self._parent._item)
         else:
-            outstr = outstr + ' -- parent: *'
+            outstr = outstr + " -- parent: *"
         print(outstr)
         if self._left is not None:
             self._left._print_structure()
@@ -451,119 +451,118 @@ class BSTNode:
             if self._right._isthisapropertree() is False:
                 ok = False
         if self._parent is not None:
-            if (self._parent._left != self
-                    and self._parent._right != self):
+            if self not in (self._parent._left, self._parent._right):
                 ok = False
         return ok
 
     def _testadd():
         node = BSTNode(TestClass("Memento", "11/10/2000"))
         node._print_structure()
-        print('> adding Melvin and Howard')
+        print("> adding Melvin and Howard")
         node.add(TestClass("Melvin and Howard", "19/09/1980"))
         node._print_structure()
-        print('> adding a second version of Melvin and Howard')
+        print("> adding a second version of Melvin and Howard")
         node.add(TestClass("Melvin and Howard", "21/03/2007"))
         node._print_structure()
-        print('> adding Mellow Mud')
+        print("> adding Mellow Mud")
         node.add(TestClass("Mellow Mud", "21/09/2016"))
         node._print_structure()
-        print('> adding Melody')
+        print("> adding Melody")
         node.add(TestClass("Melody", "21/03/2007"))
         node._print_structure()
         return node
 
     def _test():
         node = BSTNode(TestClass("B", "b"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('adding', "A")
+        print("adding", "A")
         node.add(TestClass("A", "a"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('removing', "A")
+        print("removing", "A")
         node.remove(TestClass("A"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('adding', "C")
+        print("adding", "C")
         node.add(TestClass("C", "c"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('removing', "C")
+        print("removing", "C")
         node.remove(TestClass("C"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('adding', "F")
+        print("adding", "F")
         node.add(TestClass("F", "f"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('removing', "B")
+        print("removing", "B")
         node.remove(TestClass("B"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('adding', "C")
+        print("adding", "C")
         node.add(TestClass("C", "c"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('adding', "D")
+        print("adding", "D")
         node.add(TestClass("D", "d"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('adding', "C")
+        print("adding", "C")
         node.add(TestClass("C", "c"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('adding', "E")
+        print("adding", "E")
         node.add(TestClass("E", "e"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('removing', "B")
+        print("removing", "B")
         node.remove(TestClass("B"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('removing', "D")
+        print("removing", "D")
         node.remove(TestClass("D"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('removing', "C")
+        print("removing", "C")
         node.remove(TestClass("C"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('removing', "E")
+        print("removing", "E")
         node.remove(TestClass("E"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('adding', "L")
+        print("adding", "L")
         node.add(TestClass("L", "l"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('adding', "H")
+        print("adding", "H")
         node.add(TestClass("H", "h"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('adding', "I")
+        print("adding", "I")
         node.add(TestClass("I", "i"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('adding', "G")
+        print("adding", "G")
         node.add(TestClass("G", "g"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('removing', "L")
+        print("removing", "L")
         node.remove(TestClass("L"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('removing', "H")
+        print("removing", "H")
         node.remove(TestClass("H"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('removing', "I")
+        print("removing", "I")
         node.remove(TestClass("I"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
-        print('removing', "G")
+        print("removing", "G")
         node.remove(TestClass("G"))
-        print('Ordered:', node)
+        print("Ordered:", node)
         node._print_structure()
         print(node)
 
@@ -571,7 +570,7 @@ class BSTNode:
 def main():
     """Call test methods."""
     BSTNode._testadd()
-    print('++++++++++')
+    print("++++++++++")
     BSTNode._test()
 
 
