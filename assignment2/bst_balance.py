@@ -75,6 +75,7 @@ class BSTNode:
                 new = BSTNode(obj)
                 self._left = new
                 new._parent = self
+                self._rebalance()
             else:
                 self._left.add(obj)
         elif obj > self._item:
@@ -82,10 +83,9 @@ class BSTNode:
                 new = BSTNode(obj)
                 self._right = new
                 new._parent = self
+                self._rebalance()
             else:
                 self._right.add(obj)
-        if self._parent:
-            self._parent._rebalance()
         return obj
 
     def findmaxnode(self):
@@ -181,7 +181,6 @@ class BSTNode:
                     parent._left = None
                 elif parent._right is self:
                     parent._right = None
-                parent._rebalance()
             self._clear_node()
         elif not self._right:
             leftchild = self._left
@@ -197,8 +196,6 @@ class BSTNode:
             else:
                 self._right = None
             leftchild._clear_node()
-            if parent:
-                parent._rebalance()
         else:
             rightchild = self._right
             self._item = rightchild._item
@@ -213,31 +210,30 @@ class BSTNode:
             else:
                 self._right = None
             rightchild._clear_node()
-            if parent:
-                parent._rebalance()
+        if parent:
+            parent._rebalance()
         return original_item
 
     def _rebalance(self):
         prev_height = self._height
-        height = self.height()
-        self._height = height
+        self._height = self.height()
         if self._unbalanced():
             if self._left and self._right:
                 if self._left._height > self._right._height:
-                    self._restructure_left()
+                    self._restructure_leftchild()
                 else:
-                    self._restructure_right()
+                    self._restructure_rightchild()
             elif self._left and not self._right:
-                self._restructure_left()
+                self._restructure_leftchild()
             else:
-                self._restructure_right()
+                self._restructure_rightchild()
 
             if self._parent:
                 self._parent._rebalance()
         elif self._height != prev_height and self._parent:
             self._parent._rebalance()
 
-    def _restructure_left(self):
+    def _restructure_leftchild(self):
         left = self._left
         if left._left and left._right:
             if left._right._height > left._left._height:
@@ -246,10 +242,10 @@ class BSTNode:
             left._rotate_rightchild()
         self._rotate_leftchild()
 
-    def _restructure_right(self):
+    def _restructure_rightchild(self):
         right = self._right
         if right._left and right._right:
-            if right._left._height < right._right._height:
+            if right._left._height > right._right._height:
                 right._rotate_leftchild()
         elif right._left and not right._right:
             right._rotate_leftchild()
@@ -274,7 +270,7 @@ class BSTNode:
             left._right = self._right
             self._right._parent = left
         else:
-            self._right = None
+            left._right = None
         self._right = left
         self._height = self.height()
         left._height = left.height()
