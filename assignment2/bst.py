@@ -14,6 +14,7 @@ class BSTNode:
         self._left = None
         self._right = None
         self._parent = None
+        self._height = 0
 
     def __str__(self):
         """Return a string representation of the tree rooted at this node.
@@ -74,6 +75,7 @@ class BSTNode:
                 new = BSTNode(obj)
                 self._left = new
                 new._parent = self
+                self._rebalance()
             else:
                 self._left.add(obj)
         elif obj > self._item:
@@ -81,6 +83,7 @@ class BSTNode:
                 new = BSTNode(obj)
                 self._right = new
                 new._parent = self
+                self._rebalance()
             else:
                 self._right.add(obj)
         return obj
@@ -166,13 +169,14 @@ class BSTNode:
         Maintains the BST properties.
         """
         original_item = self._item
+        parent = self._parent
         if self.full():
             big_node = self._left.findmaxnode()  # Biggest item on left
             self._item = big_node._item  # Swap current item with biggest item
+            big_node._parent._rebalance()
             big_node.remove_node()  # Remove the previous biggest item's node
         elif self.leaf():
-            parent = self._parent
-            if parent is not None:  # If node has a parent,
+            if parent:  # If node has a parent,
                 if parent._left is self:  # Set parent's child ref to None
                     parent._left = None
                 elif parent._right is self:
@@ -206,20 +210,119 @@ class BSTNode:
             else:
                 self._right = None
             rightchild._clear_node()
+        if parent:
+            parent._rebalance()
         return original_item
 
+    def _rebalance(self):
+        prev_height = self._height
+        self._height = self.height()
+        if self._unbalanced():
+            if self._left and self._right:
+                if self._left._height > self._right._height:
+                    self._restructure_leftchild()
+                else:
+                    self._restructure_rightchild()
+            elif self._left and not self._right:
+                self._restructure_leftchild()
+            else:
+                self._restructure_rightchild()
+
+            if self._parent:
+                self._parent._rebalance()
+        elif self._height != prev_height and self._parent:
+            self._parent._rebalance()
+
+    def _restructure_leftchild(self):
+        left = self._left
+        if left._left and left._right:
+            if left._right._height > left._left._height:
+                left._rotate_rightchild()
+        elif left._right and not left._left:
+            left._rotate_rightchild()
+        self._rotate_leftchild()
+
+    def _restructure_rightchild(self):
+        right = self._right
+        if right._left and right._right:
+            if right._left._height > right._right._height:
+                right._rotate_leftchild()
+        elif right._left and not right._right:
+            right._rotate_leftchild()
+        self._rotate_rightchild()
+
+    def _rotate_leftchild(self):
+        left = self._left
+        self_item = self._item
+        self._item = left._item
+        left._item = self_item
+
+        if left._left:
+            self._left = left._left
+            left._left._parent = self
+        else:
+            self._left = None
+        if left._right:
+            left._left = left._right
+        else:
+            left._left = None
+        if self._right:
+            left._right = self._right
+            self._right._parent = left
+        else:
+            left._right = None
+        self._right = left
+        self._height = self.height()
+        left._height = left.height()
+
+    def _rotate_rightchild(self):
+        right = self._right
+        self_item = self._item
+        self._item = right._item
+        right._item = self_item
+
+        if right._right:
+            self._right = right._right
+            right._right._parent = self
+        else:
+            self._right = None
+        if right._left:
+            right._right = right._left
+        else:
+            right._right = None
+        if self._left:
+            right._left = self._left
+            self._left._parent = right
+        else:
+            right._left = None
+        self._left = right
+        self._height = self.height()
+        right._height = right.height()
+
+    def _unbalanced(self):
+        if self._left or self._right:
+            if self._left and self._right:
+                if abs(self._left._height - self._right._height) >= 2:
+                    return True
+            elif self._left and not self._right:
+                if self._left._height >= 2:
+                    return True
+            elif self._right._height >= 2:
+                return True
+        return False
+
     def _clear_node(self):
-        """Set all of the attributes in the node to None."""
         self._item = None
         self._parent = None
         self._left = None
         self._right = None
+        self._height = None
 
     def _print_structure(self):
         """(Private) Print a structured representation of tree at this node."""
         if self._isthisapropertree() is False:
             print("ERROR: this is not a proper Binary Search Tree. ++++++++++")
-        outstr = str(self._item) + ' (hgt=' + str(self.height()) + ')['
+        outstr = str(self._item) + ' (hgt=' + str(self._height) + ')['
         if self._left is not None:
             outstr = outstr + "left: " + str(self._left._item)
         else:
@@ -243,6 +346,7 @@ class BSTNode:
 
         First checks that this is a proper tree (i.e. parent and child
         references all link up properly.
+
         Then checks that it obeys the BST property.
         """
         if not self._isthisapropertree():
