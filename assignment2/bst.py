@@ -569,6 +569,7 @@ class BSTNode:
 
 
 def main():
+    """Call test methods."""
     BSTNode._testadd()
     print('++++++++++')
     BSTNode._test()
