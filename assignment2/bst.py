@@ -66,16 +66,16 @@ class BSTNode:
 
         Returns the item added, or None if a matching object was already there.
         """
-        if self._item is None:
-            self._item = obj
+        if self._item is None:  # If the node is empty, tree below is empty
+            self._item = obj  # Add the object into the node
         elif self.search(obj):
-            return None
+            return None  # If the object is already in the tree
         elif obj < self._item:
             if not self._left:
-                new = BSTNode(obj)
-                self._left = new
+                new = BSTNode(obj)  # Create a new node for the object
+                self._left = new  # Link current node to new node
                 new._parent = self
-                self._rebalance()
+                self._rebalance()  # Self is the parent, so rebalance it
             else:
                 self._left.add(obj)
         elif obj > self._item:
@@ -130,9 +130,7 @@ class BSTNode:
 
     def semileaf(self):
         """Return True if this node has exactly one child."""
-        if self._left and not self._right:
-            return True
-        elif not self._left and self._right:
+        if self._left and not self._right or not self._left and self._right:
             return True
         return False
 
@@ -157,31 +155,29 @@ class BSTNode:
         Remove the matching object from the tree rooted at this node.
         Maintains the BST properties.
         """
-        node = self.search_node(searchitem)
-        if node:
-            original_item = node._item
-            node.remove_node()
-            return original_item
+        node = self.search_node(searchitem)  # Result of search
+        if node:  # If the search returned something
+            return node.remove_node()
 
     def remove_node(self):
         """Remove this BSTNode from its tree, and return its element.
 
         Maintains the BST properties.
         """
-        original_item = self._item
+        original_item = self._item  # Save item to return later
         parent = self._parent
         if self.full():
-            big_node = self._left.findmaxnode()  # Biggest item on left
-            self._item = big_node._item  # Swap current item with biggest item
-            big_node._parent._rebalance()
-            big_node.remove_node()  # Remove the previous biggest item's node
+            max_node = self._left.findmaxnode()  # Biggest item on left
+            self._item = max_node._item  # Swap current item with biggest item
+            max_node._parent._rebalance()
+            max_node.remove_node()  # Remove the previous biggest item's node
         elif self.leaf():
             if parent:  # If node has a parent,
                 if parent._left is self:  # Set parent's child ref to None
                     parent._left = None
                 elif parent._right is self:
                     parent._right = None
-            self._clear_node()
+            self._clear_node()  # Clear the current node
         elif not self._right:
             leftchild = self._left
             self._item = leftchild._item  # Move item from leftchild to self
@@ -195,7 +191,7 @@ class BSTNode:
                 leftchild._right._parent = self
             else:
                 self._right = None
-            leftchild._clear_node()
+            leftchild._clear_node()  # Clear the node that was removed
         else:
             rightchild = self._right
             self._item = rightchild._item
@@ -209,18 +205,23 @@ class BSTNode:
                 self._right = rightchild._right
             else:
                 self._right = None
-            rightchild._clear_node()
+            rightchild._clear_node()  # Clear the node that was removed
         if parent:
             parent._rebalance()
         return original_item
 
     def _rebalance(self):
-        prev_height = self._height
-        self._height = self.height()
+        """Check if the node needs rebalancing.
+
+        Update the height of the current node and, if necessary, rebalance
+        the tree, maintaining BST properties.
+        """
+        prev_height = self._height  # Save current height for comparison later
+        self._height = self.height()  # Update the height of the node
         if self._unbalanced():
             if self._left and self._right:
                 if self._left._height > self._right._height:
-                    self._restructure_leftchild()
+                    self._restructure_leftchild()  # If left causes unbalance
                 else:
                     self._restructure_rightchild()
             elif self._left and not self._right:
@@ -229,53 +230,57 @@ class BSTNode:
                 self._restructure_rightchild()
 
             if self._parent:
-                self._parent._rebalance()
+                self._parent._rebalance()  # Rebalance the node's parent
         elif self._height != prev_height and self._parent:
-            self._parent._rebalance()
+            self._parent._rebalance()  # Rebalance parent if height changed
 
     def _restructure_leftchild(self):
+        """Restructure the leftchild, doing a double rotation if necessary."""
         left = self._left
-        if left._left and left._right:
+        if left._left and left._right:  # If left has both children
             if left._right._height > left._left._height:
-                left._rotate_rightchild()
+                left._rotate_rightchild()  # Double rotate if right unbalanced
         elif left._right and not left._left:
             left._rotate_rightchild()
         self._rotate_leftchild()
 
     def _restructure_rightchild(self):
+        """Restructure the rightchild, doing a double rotation if necessary."""
         right = self._right
-        if right._left and right._right:
+        if right._left and right._right:  # If right has both children
             if right._left._height > right._right._height:
-                right._rotate_leftchild()
+                right._rotate_leftchild()  # Double rotate if left unbalanced
         elif right._left and not right._right:
             right._rotate_leftchild()
         self._rotate_rightchild()
 
     def _rotate_leftchild(self):
+        """Rotate the leftchild into the node."""
         left = self._left
-        self_item = self._item
-        self._item = left._item
-        left._item = self_item
+        self_item = self._item  # Save current item in self
+        self._item = left._item  # Move item from leftchild into self
+        left._item = self_item  # Move item from self into leftchild
 
-        if left._left:
+        if left._left:  # Link to self if left has leftchild
             self._left = left._left
-            left._left._parent = self
+            left._left._parent = self  # Update parent link
         else:
             self._left = None
-        if left._right:
+        if left._right:  # Move rightchild into leftchild
             left._left = left._right
         else:
             left._left = None
-        if self._right:
-            left._right = self._right
-            self._right._parent = left
+        if self._right:   # If self had a rightchild
+            left._right = self._right  # Link to the other node
+            self._right._parent = left  # Update parent link
         else:
             left._right = None
-        self._right = left
-        self._height = self.height()
+        self._right = left   # Now link the rotated node to self
+        self._height = self.height()  # Self changed position, update height
         left._height = left.height()
 
     def _rotate_rightchild(self):
+        """Rotate the rightchild into the node."""
         right = self._right
         self_item = self._item
         self._item = right._item
@@ -300,6 +305,12 @@ class BSTNode:
         right._height = right.height()
 
     def _unbalanced(self):
+        """Check if the node is unbalanced.
+
+        Returns:
+            True if the difference between the heights of the node's children
+            is greater that or equal to 2, False otherwise
+        """
         if self._left or self._right:
             if self._left and self._right:
                 if abs(self._left._height - self._right._height) >= 2:
@@ -312,6 +323,7 @@ class BSTNode:
         return False
 
     def _clear_node(self):
+        """Set all attributes in node to None."""
         self._item = None
         self._parent = None
         self._left = None
