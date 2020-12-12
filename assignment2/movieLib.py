@@ -62,7 +62,7 @@ class MovieLib:
 
     def __init__(self):
         """Initialise a movie library."""
-        self.bst = BSTNode(None)
+        self.bst = None
 
     def __str__(self):
         """Return a string representation of the library.
@@ -94,6 +94,10 @@ class MovieLib:
         Returns:
             the movie file that was added, or None
         """
+        if self.bst is None:
+            movie = Movie(title, date, runtime)
+            self.bst = BSTNode(movie)
+            return movie
         return self.bst.add(Movie(title, date, runtime))
 
     def remove(self, title):
@@ -102,7 +106,11 @@ class MovieLib:
         Args:
             title - the title of the movie to be removed
         """
-        return self.bst.remove(Movie(title))
+        if self.bst is not None:
+            outcome = self.bst.remove(Movie(title))
+            if self.bst.size() == 0:
+                self.bst = None
+            return outcome
 
     def _testadd():
         library = MovieLib()
@@ -220,15 +228,9 @@ def build_library(filename):
     return library
 
 
-def main():
-    """Test methods."""
-    # MovieLib._testadd()
-    # print('++++++++++')
-    # MovieLib._test()
-
-    # file = "smallmovies.txt"
-    # file = "small_repeated_movies.txt"
-    file = "movies.txt"
+def build_and_search(file, searchlist):
+    """Build and search tests for library."""
+    print("Library for:", file)
 
     before = time()
     newlibrary = build_library(file)
@@ -240,28 +242,33 @@ def main():
     print("\tHeight of root node:", newlibrary.bst.height())
     print("\tProper BST?", newlibrary.bst._properBST())
 
-    print("Searching")
-
-    before = time()
-    movie = newlibrary.search("Iron Man")
-    after = time()
-    time_taken = after - before
-    print("\t%s found in %fs" % (movie, time_taken))
-
-    before = time()
-    movie = newlibrary.search("Cleopatra")
-    after = time()
-    time_taken = after - before
-    print("\t%s found in %fs" % (movie, time_taken))
-
-    before = time()
-    movie = newlibrary.search("Avatar 2")
-    after = time()
-    time_taken = after - before
-    print("\t%s found in %fs" % (movie, time_taken))
+    for searchitem in searchlist:
+        print("Searching for:", searchitem)
+        before = time()
+        movie = newlibrary.search(searchitem)
+        after = time()
+        time_taken = after - before
+        print("\t%s found in %fs" % (movie, time_taken))
+        if movie:
+            print("\t|_", movie.full_str())
 
     # newlibrary.bst._print_structure()
     # print(newlibrary.bst._BSTproperties())
+    print("*-" * 25)
+
+
+def main():
+    """Test methods."""
+    # MovieLib._testadd()
+    # print('++++++++++')
+    # MovieLib._test()
+
+    searchlist = ["Wonder Woman", "Touch of Evil", "Delicatessen",
+                  "Iron Man", "Avatar 2"]
+
+    build_and_search("smallmovies.txt", searchlist)
+    build_and_search("small_repeated_movies.txt", searchlist)
+    build_and_search("movies.txt", searchlist)
 
 
 if __name__ == "__main__":
