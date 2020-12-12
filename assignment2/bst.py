@@ -204,9 +204,9 @@ class BSTNode:
         Remove the matching object from the tree rooted at this node.
         Maintains the BST properties.
         """
-        node = self.search_node(searchitem)  # Result of search
-        if node:  # If the search returned something
-            return node.remove_node()
+        to_remove = self.search_node(searchitem)  # Result of search
+        if to_remove:  # If the search returned something
+            return to_remove.remove_node()
 
     def remove_node(self):
         """Remove this BSTNode from its tree, and return its element.

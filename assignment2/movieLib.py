@@ -69,10 +69,13 @@ class MovieLib:
 
         The string will be created by an in-order traversal.
         """
-        return str(self.bst)
+        if self.bst is not None:
+            return str(self.bst)
 
     def size(self):
         """Return the number of movies in the library."""
+        if self.bst is None:
+            return 0
         return self.bst.size()
 
     def search(self, title):
@@ -81,7 +84,8 @@ class MovieLib:
         Args:
             title: a string representing a movie title.
         """
-        return self.bst.search(Movie(title))
+        if self.bst is not None:
+            return self.bst.search(Movie(title))
 
     def add(self, title, date, runtime):
         """Add a new movie to the library.
@@ -94,11 +98,11 @@ class MovieLib:
         Returns:
             the movie file that was added, or None
         """
+        add_movie = Movie(title, date, runtime)
         if self.bst is None:
-            movie = Movie(title, date, runtime)
-            self.bst = BSTNode(movie)
-            return movie
-        return self.bst.add(Movie(title, date, runtime))
+            self.bst = BSTNode(add_movie)
+            return add_movie
+        return self.bst.add(add_movie)
 
     def remove(self, title):
         """Remove and return the a movie object with the given title, if there.
@@ -108,8 +112,8 @@ class MovieLib:
         """
         if self.bst is not None:
             outcome = self.bst.remove(Movie(title))
-            if self.bst.size() == 0:
-                self.bst = None
+            if self.bst.size() == 0:  # If tree is now empty
+                self.bst = None  # Set reference to None
             return outcome
 
     def _testadd():
