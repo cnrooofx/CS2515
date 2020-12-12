@@ -111,10 +111,10 @@ class MovieLib:
             title - the title of the movie to be removed
         """
         if self.bst is not None:
-            outcome = self.bst.remove(Movie(title))
+            removed = self.bst.remove(Movie(title))
             if self.bst.size() == 0:  # If tree is now empty
                 self.bst = None  # Set reference to None
-            return outcome
+            return removed
 
     def _testadd():
         library = MovieLib()

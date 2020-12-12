@@ -46,7 +46,7 @@ class STestClass:
 class TestBTN:
     def test_add(self, capsys):
         node = BSTNode(STestClass("Memento", "11/10/2000"))
-        assert node._item == STestClass("Memento", "11/10/2000")
+        assert node._element == STestClass("Memento", "11/10/2000")
         node.add(STestClass("Melvin and Howard", "19/09/1980"))
         node.add(STestClass("Melvin and Howard", "21/03/2007"))
         node.add(STestClass("Mellow Mud", "21/09/2016"))
@@ -69,7 +69,7 @@ class TestBTN:
         node.add(STestClass("Z", "z"))
 
         search_node = node.search_node(STestClass("G", "g"))
-        assert search_node._item.full_str() == "G: g"
+        assert search_node._element.full_str() == "G: g"
 
     def test_search(self):
         node = BSTNode(STestClass("A", "a"))
