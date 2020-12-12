@@ -96,7 +96,7 @@ class BSTNode:
         """
         if self._element is None:
             return None
-        if self._element == searchitem:
+        elif self._element == searchitem:
             pass
         elif not self._leftchild and not self._rightchild:
             return None
