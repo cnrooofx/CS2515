@@ -161,7 +161,9 @@ class BSTNode:
         The size is the number of nodes (or elements) in the tree,
         including this node.
         """
-        if not self._left and not self._right:
+        if self._item is None:
+            return 0
+        elif not self._left and not self._right:
             return 1
         elif self._left and not self._right:
             return 1 + self._left.size()
