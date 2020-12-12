@@ -65,9 +65,9 @@ class BSTNode:
         """
         if self._leftchild is None and self._rightchild is None:
             return str(self._element)
-        elif self._rightchild is None and self._leftchild is not None:
+        if self._rightchild is None and self._leftchild is not None:
             return str(self._leftchild) + ", " + str(self._element)
-        elif self._leftchild is None and self._rightchild is not None:
+        if self._leftchild is None and self._rightchild is not None:
             return str(self._element) + ", " + str(self._rightchild)
         outstr = str(self._leftchild) + ", " + str(self._element)
         outstr += ", " + str(self._rightchild)
@@ -151,9 +151,9 @@ class BSTNode:
         """
         if not self._leftchild and not self._rightchild:
             return 0
-        elif self._leftchild and not self._rightchild:
+        if self._leftchild and not self._rightchild:
             return 1 + self._leftchild.height()
-        elif self._rightchild and not self._leftchild:
+        if self._rightchild and not self._leftchild:
             return 1 + self._rightchild.height()
         return 1 + max(self._leftchild.height(), self._rightchild.height())
 
@@ -165,9 +165,9 @@ class BSTNode:
         """
         if not self._leftchild and not self._rightchild:
             return 1
-        elif self._leftchild and not self._rightchild:
+        if self._leftchild and not self._rightchild:
             return 1 + self._leftchild.size()
-        elif self._rightchild and not self._leftchild:
+        if self._rightchild and not self._leftchild:
             return 1 + self._rightchild.size()
         return 1 + self._leftchild.size() + self._rightchild.size()
 
@@ -181,7 +181,7 @@ class BSTNode:
         """Return True if this node has exactly one child."""
         if self._leftchild and not self._rightchild:
             return True
-        elif self._rightchild and not self._leftchild:
+        if self._rightchild and not self._leftchild:
             return True
         return False
 
