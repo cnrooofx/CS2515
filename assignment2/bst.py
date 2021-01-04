@@ -117,7 +117,7 @@ class BSTNode:
         """
         if self._element is None:  # If the node is empty, tree below is empty
             self._element = obj  # Add the object into the node
-        elif self.search(obj):
+        elif self._element is obj:
             return None  # If the object is already in the tree
         elif obj < self._element:
             if not self._leftchild:
