@@ -4,13 +4,7 @@ import sys
 
 
 class Queue:
-    """A queue using a python list, with internal wrap-around.
-
-    Attributes:
-        _body: List that represents the queue body (protected)
-        _front: Index of the front item in the queue (protected)
-        _size: Number of elements in the queue (protected)
-    """
+    """A queue using a python list, with internal wrap-around."""
 
     def __init__(self):
         """Construct a queue object."""
@@ -80,7 +74,7 @@ class Queue:
         else:
             self._front = (self._front + 1) % len(self._body)
             self._size -= 1
-        if (self._size / len(self._body)) < 0.25:
+        if ((self._size / len(self._body)) < 0.25) and len(self._body) > 10:
             self.__requeue()
         return item
 

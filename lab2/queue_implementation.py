@@ -14,11 +14,11 @@ def queue_reverser(queue):
     new_queue = Queue()
     stack = Stack()
     length = queue.length
-    for i in range(length):
+    for _ in range(length):
         item = queue.dequeue()
         stack.push(item)
         queue.enqueue(item)
-    for i in range(length):
+    for _ in range(length):
         new_queue.enqueue(stack.pop())
     return new_queue
 
