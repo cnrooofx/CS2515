@@ -9,8 +9,7 @@
 
 ## Lab 2
 
-- Queue implementation  
-- Internet simulation using queues  
+- Queue implementation
 
 ## Assignment 1
 
