@@ -14,7 +14,6 @@
 ## Lab 5
 
 - Binary Search Tree implementation
-- Expression tree evaluation
 
 ## Assignment 1
 
